@@ -1,12 +1,12 @@
 import type { Database } from "./database.types.js";
 
-export type PropertyKind = "apartment" | "villa" | "cabin";
+type PropertyKind = "apartment" | "villa";
 
-export type Property = Database["public"]["Tables"]["properties"]["Row"];
+type Property = Database["public"]["Tables"]["properties"]["Row"];
 
 type PropertyInsert = Database["public"]["Tables"]["properties"]["Insert"];
 
-export type NewProperty = Omit<
+type NewProperty = Omit<
   PropertyInsert,
   "user_id" | "property_id" | "created_at" | "kind"
 > & {
@@ -14,4 +14,4 @@ export type NewProperty = Omit<
   kind: PropertyKind;
 };
 
-export type PropertyValidKey = keyof Property;
+type PropertyValidKey = keyof Property;

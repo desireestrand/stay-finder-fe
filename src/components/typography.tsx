@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef } from "react";
-import { cn } from "@/app/utils/cn";
+import { cn } from "@/utils/cn";
 
+//? Inherited prop types from Paragraph element
 type HeaderProps = ComponentPropsWithoutRef<"p"> & {
   size?: "sm" | "md" | "lg";
 };
@@ -25,5 +26,3 @@ const T = {
 };
 
 export default T;
-
-

@@ -1,27 +1,9 @@
-type BookingStatus = "pending" | "confirmed" | "cancelled";
+import type { Database } from "./database.types.js";
 
-type Booking = {
-  booking_id: string;
-  property_id: string;
-  user_id: string;
-  guest_name: string;
-  guest_email: string;
-  check_in: string;
-  check_out: string;
-  guests: number;
-  status: BookingStatus;
-  created_at: string;
-};
+type Booking = Database["public"]["Tables"]["bookings"]["Row"];
 
-type CreateBookingInput = {
-  guest_name: string;
-  guest_email: string;
-  check_in: string;
-  check_out: string;
-  guests: number;
-  status: BookingStatus;
-};
+type BookingInsert = Database["public"]["Tables"]["bookings"]["Insert"];
 
-type ApiError = {
-  errors?: [string, string][];
-};
+type NewBooking = Omit<BookingInsert, "booking_id" | "created_at">
+
+type BookingDates = Pick<Booking, 'check_in' | 'check_out'>

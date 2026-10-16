@@ -1,7 +1,7 @@
 import type { Property } from "@/types/property";
-import T from "./typography";
+import { cn } from "@/utils/cn";
 import Link from "next/link";
-import { cn } from "@/app/utils/cn";
+import T from "./typography";
 
 type PropertyCardProps = {
   property: Property;
@@ -13,18 +13,23 @@ export default function PropertyCard({
   className,
 }: PropertyCardProps) {
   return (
-    <div className={cn("shadow-md p-4 rounded-md flex flex-col gap-2 bg-white dark:bg-zinc-900", className)}>
-      <T.Header size="lg">
-        {property.title}
-      </T.Header>
-      <p>{property.city}, {property.country}</p> {/* Visar stad och land från databasen */}
-      <p>{property.price_per_night} kr / natt</p>
-      <Link 
-        href={`/properties/${property.property_id}`} 
-        className="text-blue-600 dark:text-blue-400 font-medium hover:underline mt-2 inline-block"
-      >
-        View details
-      </Link>
-    </div>
+    <Link
+      href={`/properties/${property.property_id}`}
+      className={cn(
+        "block rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-600",
+        className,
+      )}
+    >
+      <article>
+      <T.Header size="md">{property.title}</T.Header>
+      <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+        {property.city}
+      </p>
+      <p className="mt-4 text-sm font-medium">
+        {property.price_per_night} kr
+        <span className="font-normal text-zinc-500"> / night</span>
+      </p>
+      </article>
+    </Link>
   );
 }
