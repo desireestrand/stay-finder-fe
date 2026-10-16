@@ -27,9 +27,22 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const fetchUser = async () => {
     try {
       setIsLoading(true);
-      const currentUser = await getMe();
-      setUser(currentUser);
-      setError(null);
+      const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/me/`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data?.user as AuthUser | null);
+        setError(null);
+      } else {
+        setUser(null);
+      }
     } catch (err) {
       setUser(null);
       setError((err as Error).message ?? "Kunde inte hämta användare");
@@ -60,23 +73,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setUser(null);
   };
-
-  const _getMe = async () => {
-    try {
-      const user = await getMe();
-      if (!user) {
-        throw "User not found";
-      }
-      console.log("user", user);
-      setUser(user);
-    } catch (e) {
-      console.warn("error in getting me", e);
-    }
-  };
-
-  useEffect(() => {
-    _getMe();
-  }, []);
 
   return (
     <AuthContext.Provider value={{ user, isLoading, error, login, logout }}>

@@ -22,13 +22,16 @@ export async function getProperties({
   if (location) {
     url.searchParams.append("location", location);
   }
-  try {
-    const response = await fetch(url);
-    const properties: Property[] = await response.json();
-    return properties;
-  } catch (e) {
-    return [];
+  
+  const response = await fetch(url, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch properties");
   }
+
+  return response.json();
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
