@@ -1,15 +1,17 @@
 import PropertyCard from "./PropertyCard";
 import PropertyFilter from "./PropertyFilter";
-import { getProperties } from "@/utils/propertyService";
-import type { PropertyListFilter } from "@/types/property";
+import { getProperties, getPropertiesByKind } from "@/utils/propertyService";
+import type { PropertyKind, PropertyListFilter } from "@/types/property";
 import T from "./typography";
 
 type PropertyListProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
+  kind?: PropertyKind;
 };
 
 export default async function PropertyList({
   searchParams,
+  kind,
 }: PropertyListProps) {
   const params = await searchParams;
 
@@ -25,24 +27,43 @@ export default async function PropertyList({
     offset: params.offset ? Number(params.offset) : 0,
   };
 
-  console.log("Filters received:", filters);
+  let result;
 
-  const result = await getProperties(filters);
+  if (kind) {
+    result = await getPropertiesByKind(kind, filters);
+  } else {
+    result = await getProperties(filters);
+  }
+
   const properties = result.data;
 
   return (
-   <div className="flex flex-col gap-8 max-w-6xl mx-auto px-4 py-8">
+    <div className="flex flex-col gap-8 max-w-6xl mx-auto px-4 py-8">
       <div className="flex flex-col items-center gap-4 text-center">
-        <T.Header size="lg">Find your perfect stay</T.Header>
+        <T.Header size="lg">
+          {kind ? `${kind.toLocaleUpperCase()}S` : "Find your perfect stay"}
+        </T.Header>
       </div>
 
       <PropertyFilter filter={filters} />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {properties.map((property) => (
-          <PropertyCard key={property.property_id} property={property} />
-        ))}
-      </div>
+      {properties.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-zinc-300 py-16 text-center dark:border-zinc-800">
+          <p className="text-lg font-medium text-zinc-900 dark:text-zinc-100">
+            No properties found...
+          </p>
+          
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Try changing or clearing your filters to see more results.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {properties.map((property) => (
+            <PropertyCard key={property.property_id} property={property} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

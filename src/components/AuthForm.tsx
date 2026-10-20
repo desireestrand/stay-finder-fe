@@ -1,11 +1,11 @@
 "use client";
 
+import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import type { SubmitEvent } from "react";
-import T from "./typography";
-import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import T from "./typography";
 
 type AuthFormProps = {
   mode: "login" | "signup";
@@ -14,16 +14,17 @@ type AuthFormProps = {
 export default function AuthForm({ mode }: AuthFormProps) {
   const auth = useAuth();
   const router = useRouter();
+
   const [error, setError] = useState<string>();
   const [pending, setPending] = useState(false);
 
-  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     setError(undefined);
     setPending(true);
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(e.currentTarget);
     const email = String(formData.get("email")).trim();
     const password = String(formData.get("password"));
 
@@ -39,6 +40,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
     if (typeof response === "string") {
       setError(response);
+
       return;
     }
 
@@ -62,6 +64,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
               <label className="block text-sm font-medium text-gray-700">
                 E-mail
               </label>
+
               <input
                 name="email"
                 type="email"
@@ -75,6 +78,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
               <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
+
               <input
                 name="password"
                 type="password"

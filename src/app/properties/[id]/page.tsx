@@ -1,13 +1,14 @@
-import PropertyBookerCard from "@/components/PropertyBookerCard";
-import T from "@/components/typography";
 import { getPropertyById } from "@/utils/propertyService";
+import PropertyBookerCard from "@/components/PropertyBookerCard";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import T from "@/components/typography";
 
 export default async function PropertyPage({
   params,
 }: PageProps<"/properties/[id]">) {
   const { id } = await params;
+
   const property = await getPropertyById(id);
 
   if (!property) {
@@ -31,6 +32,7 @@ export default async function PropertyPage({
 
       <div className="flex flex-col gap-1.5">
         <T.Header size="lg">{property.title}</T.Header>
+
         <p className="text-zinc-600 dark:text-zinc-400">
           {property.city}, {property.country}{" "}
         </p>
@@ -51,6 +53,7 @@ export default async function PropertyPage({
               <span className="text-lg text-zinc-900 dark:text-zinc-100 font-semibold">
                 {property.price_per_night} SEK
               </span>
+
               <span className="text-lg text-zinc-500 dark:text-zinc-400">
                 {" "}
                 / night
@@ -62,16 +65,20 @@ export default async function PropertyPage({
             <h3 className="py-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
               About the property
             </h3>
+
             <p>
               <span className="text-sm text-zinc-500 dark:text-zinc-400">
                 {property.kind && `${property.kind.toLocaleUpperCase()}`}{" "}
               </span>
+
               <span className="text-zinc-400 dark:text-zinc-600">·</span>
+
               <span className="text-sm text-zinc-500 dark:text-zinc-400">
                 {" "}
                 Max {property.max_guests} guests
               </span>
             </p>
+
             <p className="py-3 leading-relaxed text-zinc-700 dark:text-zinc-300 whitespace-pre-line">
               {property.description}
             </p>

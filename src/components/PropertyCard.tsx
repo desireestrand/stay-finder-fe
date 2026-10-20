@@ -31,6 +31,7 @@ export default function PropertyCard({
             alt={property.title}
             className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105"
           />
+
           {property.kind && (
             <span className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-xs font-semibold text-zinc-900 shadow-sm uppercase tracking-wider dark:bg-zinc-950/80 dark:text-zinc-100">
               {property.kind}
@@ -56,6 +57,7 @@ export default function PropertyCard({
               <span className="text-base font-bold text-zinc-900 dark:text-zinc-100">
                 {property.price_per_night} SEK
               </span>
+
               <span className="text-zinc-500 dark:text-zinc-400">
                 {" "}
                 / night

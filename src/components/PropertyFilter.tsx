@@ -1,8 +1,14 @@
 "use client";
 
 import { PropertyListFilter } from "@/types/property";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState, SetStateAction, Dispatch, SubmitEvent } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  useEffect,
+  useState,
+  SetStateAction,
+  Dispatch,
+  SubmitEvent,
+} from "react";
 
 type SearchBarProps = {
   search: string;
@@ -28,6 +34,7 @@ type PropertyFilterProps = {
 
 export default function PropertyFilter({ filter }: PropertyFilterProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [q, setQ] = useState(filter.q || "");
@@ -46,7 +53,17 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
   const [sortBy, setSortBy] = useState(filter.sort_by || "created_at");
   const [sortOrder, setSortOrder] = useState(filter.sort_order || "desc");
 
-  const onFiltering = (e: SubmitEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    setQ(filter.q || "");
+    setCity(filter.city || "");
+    setMaxGuests(filter.max_guests ? String(filter.max_guests) : "");
+    setMinPrice(filter.min_price !== undefined ? String(filter.min_price) : "");
+    setMaxPrice(filter.max_price !== undefined ? String(filter.max_price) : "");
+    setSortBy(filter.sort_by || "created_at");
+    setSortOrder(filter.sort_order || "desc");
+  }, [pathname, filter]);
+
+  const handleSearch = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const params = new URLSearchParams(searchParams.toString());
@@ -72,12 +89,12 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
     params.delete("offset");
 
     const query = params.toString();
-    router.push(query ? `/?${query}` : "/");
+    router.push(query ? `${pathname}?${query}` : pathname);
   };
 
   return (
-   <form
-      onSubmit={onFiltering}
+    <form
+      onSubmit={handleSearch}
       className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
@@ -85,6 +102,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
           <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
             Search words
           </label>
+
           <Searchbar
             search={q}
             setSearch={setQ}
@@ -96,6 +114,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
           <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
             City
           </label>
+
           <Searchbar
             search={city}
             setSearch={setCity}
@@ -107,6 +126,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
           <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
             Guests
           </label>
+
           <input
             type="number"
             min={1}
@@ -120,11 +140,11 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
 
       <div className="flex flex-col gap-4 pt-4 border-t border-zinc-100 md:flex-row md:items-end md:justify-between dark:border-zinc-800">
         <div className="flex flex-wrap items-end gap-4">
-          
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
               Price per night (SEK)
             </label>
+
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -134,7 +154,9 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
                 placeholder="Min"
                 className="h-10 w-24 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
               />
+
               <span className="text-zinc-400">-</span>
+
               <input
                 type="number"
                 min={0}
@@ -150,6 +172,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
             <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
               Sort by
             </label>
+
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
@@ -166,6 +189,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
             <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
               Order
             </label>
+
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as any)}
