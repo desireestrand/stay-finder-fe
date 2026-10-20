@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import { BookingDates } from "@/types/booking"
 import type { Property } from "@/types/property"
@@ -17,4 +17,4 @@ export default function PropertyBookerCard({}: PropertyBookerCard) {
             <BookingPicker initialDates={bookingDates} selectDates={setBookingDates}/>
         </div>
     )
-}
+} */

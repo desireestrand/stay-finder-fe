@@ -1,7 +1,7 @@
 // src/components/PageWrapper.tsx
 "use client";
 
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from "@/contexts/AuthContext";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 

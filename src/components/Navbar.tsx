@@ -1,89 +1,114 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
-  const { user, logout, loading } = useAuth();
+  const { user, logout, isLoading } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/");
+  };
 
   return (
-    <header className="border-b bg-white">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-4">
-        
+    <header className="border-b bg-white sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link href="/" className="text-xl font-bold text-blue-600">
+          <Link
+            href="/"
+            className="font-bold text-xl text-black flex items-center gap-2"
+          >
             StayFinder
           </Link>
 
-          <Link href="/properties" className="text-gray-700 hover:text-blue-600">
-            Boenden
-          </Link>
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+            <Link href="/properties" className="hover:text-black transition">
+              Properties
+            </Link>
 
-          <div className="relative group">
-            <button className="text-gray-700 hover:text-blue-600 flex items-center gap-1">
-              Kategorier
-            </button>
+            <div className="relative group py-4">
+              <button className="flex items-center gap-1 hover:text-black transition">
+                Categories{" "}
+                <span className="text-xs transition-transform group-hover:rotate-180">
+                  ▾
+                </span>
+              </button>
 
-            <div className="absolute left-0 top-full hidden group-hover:block bg-white border rounded-md shadow-md py-2 w-40 z-10">
-              <Link href="/properties/kind/apartment" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Lägenheter
-              </Link>
-              <Link href="/properties/kind/villa" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Villor
-              </Link>
-              <Link href="/properties/kind/cabin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Stugor
-              </Link>
+              <div className="absolute top-full left-0 w-44 bg-white border rounded-lg shadow-lg py-2 hidden group-hover:flex flex-col z-50">
+                <Link
+                  href="/properties/kind/apartment"
+                  className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                >
+                  Apartments
+                </Link>
+                <Link
+                  href="/properties/kind/villa"
+                  className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                >
+                  Villas
+                </Link>
+                <Link
+                  href="/properties/kind/cabin"
+                  className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                >
+                  Cabins
+                </Link>
+              </div>
             </div>
-          </div>
+          </nav>
         </div>
 
         <div className="flex items-center gap-4">
-          {loading ? (
-            <span className="text-sm text-gray-400">Laddar...</span>
+          {isLoading ? (
+            <span className="text-sm text-gray-400">Loading...</span>
           ) : user ? (
             <>
-              <Link 
-                href="/properties/new" 
-                className="rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              <span className="text-sm text-gray-600 hidden lg:inline">
+                Logged in as: {user.email}
+              </span>
+
+              <Link
+                href="/properties/new"
+                className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition"
               >
-                + Skapa boende
+                + Add property
               </Link>
 
-              <Link 
-                href="/profile" 
-                className="text-gray-700 hover:text-blue-600 font-medium"
+              <Link
+                href="/profile"
+                className="text-sm font-medium text-gray-700 hover:text-black transition"
               >
-                Mina sidor
+                My pages
               </Link>
 
               <button
-                onClick={logout}
-                className="text-sm font-medium text-red-600 hover:text-red-800"
+                onClick={handleLogout}
+                className="text-sm font-medium text-red-600 hover:text-red-800 transition"
               >
-                Logga ut
+                Log out
               </button>
             </>
           ) : (
             <>
-              <Link 
-                href="/login" 
-                className="text-gray-700 hover:text-blue-600 font-medium"
+              <Link
+                href="/auth/login"
+                className="text-sm font-medium text-gray-700 hover:text-black transition px-3 py-2"
               >
-                Logga in
+                Log in
               </Link>
-
-              <Link 
-                href="/signup" 
-                className="rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              <Link
+                href="/auth/signup"
+                className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition"
               >
-                Skapa konto
+                Create account
               </Link>
             </>
           )}
         </div>
-
-      </nav>
+      </div>
     </header>
   );
 }

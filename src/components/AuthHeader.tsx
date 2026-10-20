@@ -1,6 +1,6 @@
-"use client";
+/* "use client";
 
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from "@/contexts/AuthContext";
 import T from "./typography";
 
 export default function AuthHeader(){
@@ -14,4 +14,4 @@ export default function AuthHeader(){
             {auth.user && <T.Header>Logged in {auth.user.email}</T.Header>}
         </div>
     )
-}
+} */
