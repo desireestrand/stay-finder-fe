@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import Providers from "@/components/Providers";
-import Navbar from "@/components/Navbar";
+import NavBar from "@/components/NavBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,13 +28,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col font-sans">
         <Providers>
-          <Navbar />
+          <NavBar />
 
           {children}
-          
+
           <footer className="border-t border-zinc-200 bg-white dark:border-zinc-800 dark:bg-black">
             <div className="mx-auto w-full max-w-3xl px-6 py-6 text-sm text-zinc-600 dark:text-zinc-400">
-              © {/* {new Date().getFullYear()} */} Stay Finder
+              © 2026 StayFinder
             </div>
           </footer>
         </Providers>

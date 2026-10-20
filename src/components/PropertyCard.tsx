@@ -12,23 +12,61 @@ export default function PropertyCard({
   property,
   className,
 }: PropertyCardProps) {
+  const imageUrl =
+    property.image_url ||
+    "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=1000&auto=format&fit=crop";
+
   return (
     <Link
       href={`/properties/${property.property_id}`}
       className={cn(
-        "block rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-600",
+        "group block overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition duration-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900",
         className,
       )}
     >
-      <article>
-      <T.Header size="md">{property.title}</T.Header>
-      <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-        {property.city}
-      </p>
-      <p className="mt-4 text-sm font-medium">
-        {property.price_per_night} kr
-        <span className="font-normal text-zinc-500"> / night</span>
-      </p>
+      <article className="flex flex-col h-full">
+        <div className="relative h-64 w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+          <img
+            src={imageUrl}
+            alt={property.title}
+            className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105"
+          />
+          {property.kind && (
+            <span className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-xs font-semibold text-zinc-900 shadow-sm uppercase tracking-wider dark:bg-zinc-950/80 dark:text-zinc-100">
+              {property.kind}
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col p-5 justify-between gap-4">
+          <div>
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="font-semibold text-zinc-900 group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300 transition-colors line-clamp-1">
+                {property.title}
+              </h3>
+            </div>
+
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+              {property.city}, {property.country} · Max {property.max_guests} guests
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between pt-3 border-t border-zinc-100 dark:border-zinc-800">
+            <div>
+              <span className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                {property.price_per_night} SEK
+              </span>
+              <span className="text-zinc-500 dark:text-zinc-400">
+                {" "}
+                / night
+              </span>
+            </div>
+
+            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              View property →
+            </span>
+          </div>
+        </div>
       </article>
     </Link>
   );

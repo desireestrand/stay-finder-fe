@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
-export default function Navbar() {
+export default function NavBar() {
   const { user, logout, isLoading } = useAuth();
   const router = useRouter();
 

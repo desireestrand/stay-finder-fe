@@ -1,6 +1,6 @@
 import type { Database } from "./database.types.js";
 
-type PropertyKind = "apartment" | "villa";
+type PropertyKind = "apartment" | "villa" | "cabin";
 
 type Property = Database["public"]["Tables"]["properties"]["Row"];
 
@@ -15,3 +15,18 @@ type NewProperty = Omit<
 };
 
 type PropertyValidKey = keyof Property;
+
+type PropertySortBy = "title" | "city" | "price_per_night" | "created_at";
+type SortOrder = "asc" | "desc";
+
+type PropertyListFilter = {
+  limit: number;
+  offset: number;
+  city?: string;
+  max_guests?: number;
+  min_price?: number;
+  max_price?: number;
+  q?: string;
+  sort_by: PropertySortBy;
+  sort_order: SortOrder;
+};

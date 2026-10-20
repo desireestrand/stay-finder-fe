@@ -1,53 +1,189 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
-import { useRouter } from "next/navigation";
-import type { PropertiesFilter } from "@/utils/propertyService";
+import { PropertyListFilter } from "@/types/property";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, SetStateAction, Dispatch, SubmitEvent } from "react";
 
 type SearchBarProps = {
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
+  placeholder?: string;
 };
 
-function Searchbar({ search, setSearch }: SearchBarProps) {
+function Searchbar({ search, setSearch, placeholder }: SearchBarProps) {
   return (
     <input
       type="search"
       value={search}
-      placeholder="Location"
+      placeholder={placeholder}
       onChange={(e) => setSearch(e.target.value)}
-      className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-300"
+      className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
     />
   );
 }
 
 type PropertyFilterProps = {
-  filter: PropertiesFilter;
+  filter: PropertyListFilter;
 };
 
 export default function PropertyFilter({ filter }: PropertyFilterProps) {
   const router = useRouter();
-  const [search, setSearch] = useState(filter.location || "");
+  const searchParams = useSearchParams();
 
-  const onFiltering = () => {
-    const params = new URLSearchParams();
-    if (search) {
-      params.set("location", search);
-    }
+  const [q, setQ] = useState(filter.q || "");
+  const [city, setCity] = useState(filter.city || "");
+  const [maxGuests, setMaxGuests] = useState(
+    filter.max_guests ? String(filter.max_guests) : "",
+  );
+
+  const [minPrice, setMinPrice] = useState(
+    filter.min_price !== undefined ? String(filter.min_price) : "",
+  );
+  const [maxPrice, setMaxPrice] = useState(
+    filter.max_price !== undefined ? String(filter.max_price) : "",
+  );
+
+  const [sortBy, setSortBy] = useState(filter.sort_by || "created_at");
+  const [sortOrder, setSortOrder] = useState(filter.sort_order || "desc");
+
+  const onFiltering = (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (q) params.set("q", q);
+    else params.delete("q");
+
+    if (city) params.set("city", city);
+    else params.delete("city");
+
+    if (maxGuests) params.set("max_guests", maxGuests);
+    else params.delete("max_guests");
+
+    if (minPrice) params.set("min_price", minPrice);
+    else params.delete("min_price");
+
+    if (maxPrice) params.set("max_price", maxPrice);
+    else params.delete("max_price");
+
+    if (sortBy) params.set("sort_by", sortBy);
+    if (sortOrder) params.set("sort_order", sortOrder);
+
+    params.delete("offset");
+
     const query = params.toString();
     router.push(query ? `/?${query}` : "/");
   };
 
   return (
-    <div className="flex gap-2">
-      <Searchbar search={search} setSearch={setSearch} />
-      <button
-        type="button"
-        onClick={onFiltering}
-        className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900"
-      >
-        Filter
-      </button>
-    </div>
+   <form
+      onSubmit={onFiltering}
+      className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+    >
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+            Search words
+          </label>
+          <Searchbar
+            search={q}
+            setSearch={setQ}
+            placeholder="Ex. pool, loft, cozy"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+            City
+          </label>
+          <Searchbar
+            search={city}
+            setSearch={setCity}
+            placeholder="Ex. Stockholm"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+            Guests
+          </label>
+          <input
+            type="number"
+            min={1}
+            value={maxGuests}
+            onChange={(e) => setMaxGuests(e.target.value)}
+            placeholder="Number of guests"
+            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-4 pt-4 border-t border-zinc-100 md:flex-row md:items-end md:justify-between dark:border-zinc-800">
+        <div className="flex flex-wrap items-end gap-4">
+          
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+              Price per night (SEK)
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                min={0}
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                placeholder="Min"
+                className="h-10 w-24 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
+              />
+              <span className="text-zinc-400">-</span>
+              <input
+                type="number"
+                min={0}
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                placeholder="Max"
+                className="h-10 w-24 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+              Sort by
+            </label>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+              className="h-10 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
+            >
+              <option value="created_at">Newest</option>
+              <option value="price_per_night">Price</option>
+              <option value="title">Title</option>
+              <option value="city">City</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+              Order
+            </label>
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as any)}
+              className="h-10 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
+            >
+              <option value="desc">Descending</option>
+              <option value="asc">Ascending</option>
+            </select>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full md:w-auto rounded-lg bg-zinc-900 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+        >
+          Apply filters
+        </button>
+      </div>
+    </form>
   );
 }

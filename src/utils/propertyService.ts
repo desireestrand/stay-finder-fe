@@ -1,28 +1,46 @@
-import type { Property, PropertyKind } from "@/types/property";
-
-export type PropertiesFilter = {
-  location?: string;
-};
+import type {
+  Property,
+  PropertyKind,
+  PropertyListFilter,
+} from "@/types/property";
+import type { PaginatedListResponse } from "@/types/global";
 
 export type CreatePropertyState = {
   error?: string;
   propertyId?: string;
 };
 
-const kinds: PropertyKind[] = ["apartment", "villa"];
+function buildQueryString(filters?: Partial<PropertyListFilter>): string {
+  const params = new URLSearchParams();
 
-function isPropertyKind(value: string): value is PropertyKind {
-  return kinds.includes(value as PropertyKind);
+  if (!filters) return params.toString();
+
+  if (filters.city) params.set("city", filters.city);
+  if (filters.max_guests) params.set("max_guests", String(filters.max_guests));
+  if (filters.min_price !== undefined)
+    params.set("min_price", String(filters.min_price));
+  if (filters.max_price !== undefined)
+    params.set("max_price", String(filters.max_price));
+  if (filters.q) params.set("q", filters.q);
+  if (filters.limit) params.set("limit", String(filters.limit));
+  if (filters.offset) params.set("offset", String(filters.offset));
+  if (filters.sort_by) params.set("sort_by", filters.sort_by);
+  if (filters.sort_order) params.set("sort_order", filters.sort_order);
+
+  return params.toString();
 }
 
-export async function getProperties({
-  location,
-}: PropertiesFilter = {}): Promise<Property[]> {
-  const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/properties/`);
-  if (location) {
-    url.searchParams.append("location", location);
-  }
-  
+export async function getProperties(
+  filters?: Partial<PropertyListFilter>,
+): Promise<PaginatedListResponse<Property>> {
+  const queryString = buildQueryString(filters);
+
+  const url = new URL(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties${queryString ? `?${queryString}` : ""}`,
+  );
+
+  console.log("FRONTEND FETCH URL:", url.toString());
+
   const response = await fetch(url, {
     cache: "no-store",
   });
@@ -34,17 +52,38 @@ export async function getProperties({
   return response.json();
 }
 
+export async function getPropertiesByKind(
+  kind: PropertyKind,
+  filters?: Partial<PropertyListFilter>,
+): Promise<PaginatedListResponse<Property>> {
+  const queryString = buildQueryString(filters);
+
+  const url = new URL(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/kind/${kind}${queryString ? `?${queryString}` : ""}`,
+  );
+
+  const response = await fetch(url, { cache: "no-store" });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch properties by kind");
+  }
+
+  return response.json();
+}
+
 export async function getPropertyById(id: string): Promise<Property | null> {
   try {
     const url = new URL(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/properties/${id}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/${id}`,
     );
-    const response = await fetch(url);
+
+    const response = await fetch(url, { cache: "no-store" });
+
     if (!response.ok) {
       return null;
     }
-    const property: Property = await response.json();
-    return property;
+
+    return response.json();
   } catch {
     return null;
   }
@@ -55,16 +94,15 @@ export async function createProperty(
 ): Promise<CreatePropertyState> {
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
-  const location = String(formData.get("location") ?? "").trim();
+  const city = String(formData.get("city") ?? "").trim();
+  const country = String(formData.get("country") ?? "").trim();
   const kind = String(formData.get("kind") ?? "");
   const maxGuests = Number(formData.get("max_guests"));
   const pricePerNight = Number(formData.get("price_per_night"));
+  const imageUrl = String(formData.get("image_url") ?? "").trim();
 
-  if (!isPropertyKind(kind)) {
-    return { error: "Choose apartment or villa." };
-  }
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/properties/`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties`,
     {
       method: "POST",
       credentials: "include",
@@ -74,10 +112,12 @@ export async function createProperty(
       body: JSON.stringify({
         title,
         description,
-        location,
+        city,
+        country,
         kind,
         max_guests: maxGuests,
         price_per_night: pricePerNight,
+        image_url: imageUrl || null,
       }),
     },
   );
