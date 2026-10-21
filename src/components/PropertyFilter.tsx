@@ -164,34 +164,34 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-1.5 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-        <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-          Available dates (Check-in / Check-out)
-        </label>
-
-        <div className="flex flex-col sm:flex-row items-center gap-2">
-          <input
-            type="date"
-            value={startDate}
-            min={today}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="h-10 w-full sm:w-1/2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
-          />
-
-          <span className="text-zinc-400 hidden sm:inline">-</span>
-
-          <input
-            type="date"
-            value={endDate}
-            min={startDate || today}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="h-10 w-full sm:w-1/2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
-          />
-        </div>
-      </div>
-
       <div className="flex flex-col gap-4 pt-4 border-t border-zinc-100 md:flex-row md:items-end md:justify-between dark:border-zinc-800">
         <div className="flex flex-wrap items-end gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+              Available dates (Check-in / Check-out)
+            </label>
+
+            <div className="flex flex-col sm:flex-row items-center gap-2">
+              <input
+                type="date"
+                value={startDate}
+                min={today}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="h-10 w-full sm:w-1/2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
+              />
+
+              <span className="text-zinc-400 hidden sm:inline">-</span>
+
+              <input
+                type="date"
+                value={endDate}
+                min={startDate || today}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="h-10 w-full sm:w-1/2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
+              />
+            </div>
+          </div>
+
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
               Price per night (SEK)
