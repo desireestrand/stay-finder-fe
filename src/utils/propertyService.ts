@@ -10,6 +10,11 @@ export type CreatePropertyState = {
   propertyId?: string;
 };
 
+export type UpdatePropertyState = {
+  error?: string;
+  propertyId?: string;
+};
+
 function buildQueryString(filters?: Partial<PropertyListFilter>): string {
   const params = new URLSearchParams();
 
@@ -30,6 +35,21 @@ function buildQueryString(filters?: Partial<PropertyListFilter>): string {
   if (filters.sort_order) params.set("sort_order", filters.sort_order);
 
   return params.toString();
+}
+
+export async function getUserProperties(): Promise<Property[]> {
+  const url = new URL(`${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/me`);
+
+  const response = await fetch(url, {
+    cache: "no-store",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch your properties");
+  }
+
+  return response.json();
 }
 
 export async function getProperties(
@@ -134,4 +154,74 @@ export async function createProperty(
 
   const property: Property = await response.json();
   return { propertyId: property.property_id };
+}
+
+export async function updateProperty(
+  propertyId: string,
+  formData: FormData,
+): Promise<UpdatePropertyState> {
+  const title = String(formData.get("title") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const city = String(formData.get("city") ?? "").trim();
+  const country = String(formData.get("country") ?? "").trim();
+  const kind = String(formData.get("kind") ?? "");
+  const maxGuests = Number(formData.get("max_guests"));
+  const pricePerNight = Number(formData.get("price_per_night"));
+  const imageUrl = String(formData.get("image_url") ?? "").trim();
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/${propertyId}`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        description,
+        city,
+        country,
+        kind,
+        max_guests: maxGuests,
+        price_per_night: pricePerNight,
+        image_url: imageUrl || null,
+      }),
+    },
+  );
+
+  if (response.status === 401) {
+    return { error: "You need to be signed in to update a stay." };
+  }
+
+  if (!response.ok) {
+    return {
+      error: "Could not update the stay. Check the fields and try again.",
+    };
+  }
+
+  const property: Property = await response.json();
+  return { propertyId: property.property_id };
+}
+
+export async function deleteProperty(
+  propertyId: string,
+): Promise<{ error?: string }> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/${propertyId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    },
+  );
+
+  if (response.status === 401) {
+    return { error: "You need to be signed in to delete a stay." };
+  }
+
+  if (!response.ok) {
+    return { error: "Could not delete the stay." };
+  }
+
+  return {};
 }

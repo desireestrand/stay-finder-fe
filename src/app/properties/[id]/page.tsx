@@ -1,5 +1,5 @@
 import { getPropertyById } from "@/utils/propertyService";
-import PropertyBookerCard from "@/components/PropertyBookerCard";
+import PropertyActionBox from "@/components/PropertyActionBox";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import T from "@/components/typography";
@@ -96,7 +96,7 @@ export default async function PropertyPage({
 
         <div className="lg:col-span-1 w-full order-last">
           <div className="lg:sticky lg:top-24">
-            <PropertyBookerCard property={property} />
+            <PropertyActionBox property={property} />
           </div>
         </div>
       </div>
