@@ -29,4 +29,6 @@ type PropertyListFilter = {
   q?: string;
   sort_by: PropertySortBy;
   sort_order: SortOrder;
+  start_date?: string;
+  end_date?: string;
 };

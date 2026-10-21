@@ -21,6 +21,8 @@ function buildQueryString(filters?: Partial<PropertyListFilter>): string {
     params.set("min_price", String(filters.min_price));
   if (filters.max_price !== undefined)
     params.set("max_price", String(filters.max_price));
+  if (filters.start_date) params.set("start_date", filters.start_date);
+  if (filters.end_date) params.set("end_date", filters.end_date);
   if (filters.q) params.set("q", filters.q);
   if (filters.limit) params.set("limit", String(filters.limit));
   if (filters.offset) params.set("offset", String(filters.offset));
@@ -38,8 +40,6 @@ export async function getProperties(
   const url = new URL(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties${queryString ? `?${queryString}` : ""}`,
   );
-
-  console.log("FRONTEND FETCH URL:", url.toString());
 
   const response = await fetch(url, {
     cache: "no-store",

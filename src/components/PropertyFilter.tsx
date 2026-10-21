@@ -37,6 +37,10 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const today = new Date().toISOString().split("T")[0];
+
+  const [error, setError] = useState<string | null>(null);
+
   const [q, setQ] = useState(filter.q || "");
   const [city, setCity] = useState(filter.city || "");
   const [maxGuests, setMaxGuests] = useState(
@@ -50,6 +54,9 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
     filter.max_price !== undefined ? String(filter.max_price) : "",
   );
 
+  const [startDate, setStartDate] = useState(filter.start_date || "");
+  const [endDate, setEndDate] = useState(filter.end_date || "");
+
   const [sortBy, setSortBy] = useState(filter.sort_by || "created_at");
   const [sortOrder, setSortOrder] = useState(filter.sort_order || "desc");
 
@@ -59,12 +66,25 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
     setMaxGuests(filter.max_guests ? String(filter.max_guests) : "");
     setMinPrice(filter.min_price !== undefined ? String(filter.min_price) : "");
     setMaxPrice(filter.max_price !== undefined ? String(filter.max_price) : "");
+    setStartDate(filter.start_date || "");
+    setEndDate(filter.end_date || "");
     setSortBy(filter.sort_by || "created_at");
     setSortOrder(filter.sort_order || "desc");
   }, [pathname, filter]);
 
   const handleSearch = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
+
+    if ((startDate && !endDate) || (!startDate && endDate)) {
+      setError("Both start date and end date must be provided together.");
+      return;
+    }
+
+    if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
+      setError("End date must be after start date.");
+      return;
+    }
 
     const params = new URLSearchParams(searchParams.toString());
 
@@ -82,6 +102,12 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
 
     if (maxPrice) params.set("max_price", maxPrice);
     else params.delete("max_price");
+
+    if (startDate) params.set("start_date", startDate);
+    else params.delete("start_date");
+
+    if (endDate) params.set("end_date", endDate);
+    else params.delete("end_date");
 
     if (sortBy) params.set("sort_by", sortBy);
     if (sortOrder) params.set("sort_order", sortOrder);
@@ -134,6 +160,32 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
             onChange={(e) => setMaxGuests(e.target.value)}
             placeholder="Number of guests"
             className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1.5 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+        <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          Available dates (Check-in / Check-out)
+        </label>
+
+        <div className="flex flex-col sm:flex-row items-center gap-2">
+          <input
+            type="date"
+            value={startDate}
+            min={today}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="h-10 w-full sm:w-1/2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
+          />
+
+          <span className="text-zinc-400 hidden sm:inline">-</span>
+
+          <input
+            type="date"
+            value={endDate}
+            min={startDate || today}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="h-10 w-full sm:w-1/2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300"
           />
         </div>
       </div>
@@ -207,6 +259,12 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
         >
           Apply filters
         </button>
+
+        {error && (
+          <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-950/50 dark:text-red-400">
+            {error}
+          </div>
+        )}
       </div>
     </form>
   );
