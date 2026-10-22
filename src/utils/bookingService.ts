@@ -62,6 +62,39 @@ export async function getBookingById(bookingId: string): Promise<Booking> {
   return response.json();
 }
 
+export async function createBooking(
+  propertyId: string,
+  bookingData: {
+    property_id: string;
+    guest_name: string;
+    guest_email: string;
+    check_in: string;
+    check_out: string;
+    guests: number;
+    status?: string;
+  },
+): Promise<Booking> {
+  const url = new URL(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/properties/${propertyId}`,
+  );
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(bookingData),
+  });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.message || data.error || "Failed to create booking");
+  }
+
+  return response.json();
+}
+
 export async function updateBookingStatus(
   propertyId: string,
   bookingId: string,

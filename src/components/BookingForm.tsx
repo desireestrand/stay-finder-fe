@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { SubmitEvent } from "react";
 import type { BookingDates, Booking } from "@/types/booking";
+import { createBooking } from "@/utils/bookingService";
 import ErrorMessage from "@/components/ErrorMessage";
 
 type BookingFormProps = {
   propertyId?: string;
   bookingId?: string;
+  pricePerNight?: number;
   initialData?: Booking;
   dates?: BookingDates;
   onBookingComplete?: () => void;
@@ -23,6 +25,7 @@ type BookingFormProps = {
 export default function BookingForm({
   propertyId,
   bookingId,
+  pricePerNight,
   initialData,
   dates,
   onBookingComplete,
@@ -39,11 +42,29 @@ export default function BookingForm({
     initialData?.check_out || dates?.check_out || "",
   );
 
+  const calculateNights = (checkInStr: string, checkOutStr: string) => {
+    if (!checkInStr || !checkOutStr) return 0;
+    
+    const start = new Date(checkInStr);
+    const end = new Date(checkOutStr);
+
+    const diffTime = end.getTime() - start.getTime();
+
+    const diffDays = Math.round(diffTime / (1000 * 3600 * 24));
+
+    return diffDays > 0 ? diffDays : 0;
+  };
+
+  const nights = calculateNights(checkIn, checkOut);
+  const totalPrice = pricePerNight ? nights * pricePerNight : 0;
+
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    setError(null);
 
     if (!checkIn || !checkOut) {
       setError("Please select check-in and check-out dates.");
@@ -55,8 +76,18 @@ export default function BookingForm({
       return;
     }
 
+    if (guests < 1) {
+      setError("Number of guests must be at least 1.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(guestEmail)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     setPending(true);
-    setError(null);
 
     try {
       if (action) {
@@ -71,29 +102,16 @@ export default function BookingForm({
         if (result?.error) {
           throw new Error(result.error);
         }
-      } else {
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/bookings/properties/${propertyId}`;
-
-        const response = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            guest_name: guestName,
-            guest_email: guestEmail,
-            check_in: checkIn,
-            check_out: checkOut,
-            guests,
-            status: "pending",
-          }),
+      } else if (propertyId) {
+        await createBooking(propertyId, {
+          property_id: propertyId,
+          guest_name: guestName,
+          guest_email: guestEmail,
+          check_in: checkIn,
+          check_out: checkOut,
+          guests,
+          status: "pending",
         });
-
-        if (!response.ok) {
-          const data = await response.json();
-          throw new Error(
-            data.message || data.error || "Failed to create booking",
-          );
-        }
       }
 
       onBookingComplete?.();
@@ -105,7 +123,7 @@ export default function BookingForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
       <div className="flex flex-col gap-1 text-sm">
         <label className="font-medium text-zinc-700 dark:text-zinc-300">
           Guest Name
@@ -168,7 +186,7 @@ export default function BookingForm({
         <label className="font-medium text-zinc-700 dark:text-zinc-300">
           Number of Guests
         </label>
-        
+
         <input
           type="number"
           min={1}
@@ -178,6 +196,21 @@ export default function BookingForm({
           className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
         />
       </div>
+
+      {nights > 0 && pricePerNight && (
+        <div className="rounded-lg bg-zinc-100 p-4 dark:bg-zinc-900 text-sm space-y-2 border border-zinc-200 dark:border-zinc-800">
+          <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
+            <span>
+              {pricePerNight} SEK × {nights} {nights === 1 ? "night" : "nights"}
+            </span>
+            <span>{nights * pricePerNight} SEK</span>
+          </div>
+          <div className="border-t border-zinc-200 dark:border-zinc-800 pt-2 flex justify-between font-semibold text-zinc-900 dark:text-zinc-100">
+            <span>Total price</span>
+            <span>{totalPrice} SEK</span>
+          </div>
+        </div>
+      )}
 
       <ErrorMessage message={error} />
 

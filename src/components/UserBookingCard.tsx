@@ -17,7 +17,7 @@ export default function UserBookingCard({
     <div className="border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-zinc-900 shadow-sm">
       <div className="flex flex-col gap-1">
         <T.Header size="sm">
-          Booking at Property #{booking.property_id.slice(0, 8)}
+          Booking at Property #{booking.property_id.slice(33, 36)}
         </T.Header>
 
         <p className="text-xs text-zinc-500 dark:text-zinc-400">

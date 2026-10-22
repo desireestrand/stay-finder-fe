@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { SubmitEvent } from "react";
 import ErrorMessage from "./ErrorMessage";
 import Link from "next/link";
@@ -15,6 +15,9 @@ type AuthFormProps = {
 export default function AuthForm({ mode }: AuthFormProps) {
   const auth = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const redirectTo = searchParams.get("redirectTo") || "/";
 
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -44,7 +47,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
       return;
     }
 
-    router.push("/");
+    router.push(redirectTo);
+    router.refresh();
   };
 
   const isLogin = mode === "login";

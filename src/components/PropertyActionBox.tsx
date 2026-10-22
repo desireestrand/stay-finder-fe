@@ -32,6 +32,39 @@ export default function PropertyActionBox({
     }
   }
 
+  if (!user) {
+    const currentPath = `/properties/${property.property_id}`;
+    const loginUrl = `/auth/login?redirectTo=${currentPath}`;
+    const signupUrl = `/auth/signup?redirectTo=${currentPath}`;
+
+    return (
+      <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <div>
+          <T.Header size="sm">Log in to book your stay</T.Header>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+            You need to be logged in to make a reservation for this property.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2.5">
+          <Link
+            href={loginUrl}
+            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition"
+          >
+            Log in
+          </Link>
+
+          <Link
+            href={signupUrl}
+            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition"
+          >
+            Sign up
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   if (isOwner) {
     return (
       <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
