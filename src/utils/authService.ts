@@ -17,8 +17,8 @@ export async function login(
   });
 
   if (!response.ok) {
-    const data = await response.json().catch(() => null);
-    return data?.error || "Invalid credentials";
+    const errorData = await response.json().catch(() => null);
+    return errorData?.message || errorData?.error || "Invalid credentials";
   }
 
   return true;
@@ -40,8 +40,8 @@ export async function signup(
   });
 
   if (!response.ok) {
-    const data = await response.json().catch(() => null);
-    return data?.error || "Failed to register account";
+    const errorData = await response.json().catch(() => null);
+    return errorData?.message || errorData?.error || "Failed to register account";
   }
 
   return true;
@@ -74,5 +74,6 @@ export async function getMe(): Promise<AuthUser | null> {
   }
 
   const data = await response.json();
-  return data?.user as AuthUser | null;
+
+  return (data?.user || data) as AuthUser | null;
 }

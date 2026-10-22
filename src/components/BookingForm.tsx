@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { SubmitEvent } from "react";
 import type { BookingDates, Booking } from "@/types/booking";
+import ErrorMessage from "@/components/ErrorMessage";
 
 type BookingFormProps = {
   propertyId?: string;
@@ -40,8 +42,8 @@ export default function BookingForm({
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
 
     if (!checkIn || !checkOut) {
       setError("Please select check-in and check-out dates.");
@@ -71,6 +73,7 @@ export default function BookingForm({
         }
       } else {
         const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/bookings/properties/${propertyId}`;
+
         const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -94,8 +97,8 @@ export default function BookingForm({
       }
 
       onBookingComplete?.();
-    } catch (err) {
-      setError((err as Error).message);
+    } catch (error) {
+      setError((error as Error).message);
     } finally {
       setPending(false);
     }
@@ -104,69 +107,84 @@ export default function BookingForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1 text-sm">
-        <label>Guest Name</label>
+        <label className="font-medium text-zinc-700 dark:text-zinc-300">
+          Guest Name
+        </label>
+
         <input
           type="text"
           required
           value={guestName}
           onChange={(e) => setGuestName(e.target.value)}
-          className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
         />
       </div>
 
       <div className="flex flex-col gap-1 text-sm">
-        <label>Guest Email</label>
+        <label className="font-medium text-zinc-700 dark:text-zinc-300">
+          Guest Email
+        </label>
+
         <input
           type="email"
           required
           value={guestEmail}
           onChange={(e) => setGuestEmail(e.target.value)}
-          className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
         />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1 text-sm">
-          <label>Check-in</label>
+          <label className="font-medium text-zinc-700 dark:text-zinc-300">
+            Check-in
+          </label>
+
           <input
             type="date"
             required
             value={checkIn}
             onChange={(e) => setCheckIn(e.target.value)}
-            className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+            className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
           />
         </div>
 
         <div className="flex flex-col gap-1 text-sm">
-          <label>Check-out</label>
+          <label className="font-medium text-zinc-700 dark:text-zinc-300">
+            Check-out
+          </label>
+
           <input
             type="date"
             required
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
-            className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+            className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-1 text-sm">
-        <label>Number of Guests</label>
+        <label className="font-medium text-zinc-700 dark:text-zinc-300">
+          Number of Guests
+        </label>
+        
         <input
           type="number"
           min={1}
           required
           value={guests}
           onChange={(e) => setGuests(Number(e.target.value))}
-          className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
         />
       </div>
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      <ErrorMessage message={error} />
 
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900 transition disabled:opacity-50"
+        className="rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
       >
         {pending ? "Saving..." : bookingId ? "Save Changes" : "Confirm Booking"}
       </button>

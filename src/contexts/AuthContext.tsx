@@ -27,6 +27,7 @@ const AuthContext = createContext<AuthContextState | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
     } catch (error) {
       setUser(null);
-      setError((error as Error).message ?? "Could not fetch user");
+      setError(null);
     } finally {
       setIsLoading(false);
     }
@@ -55,6 +56,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     password: string,
   ): Promise<void | string> => {
     try {
+      setError(null);
+
       const result = await apiLogin(email, password);
 
       if (result !== true) {
@@ -72,6 +75,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     password: string,
   ): Promise<void | string> => {
     try {
+      setError(null);
+
       const result = await apiSignup(email, password);
 
       if (result !== true) {
@@ -89,6 +94,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await apiLogout();
     } finally {
       setUser(null);
+      setError(null);
     }
   };
 

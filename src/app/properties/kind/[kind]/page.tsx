@@ -1,5 +1,6 @@
-import PropertyList from "@/components/PropertyList";
 import type { PropertyKind } from "@/types/property";
+import PageWrapper from "@/components/PageWrapper";
+import PropertyList from "@/components/PropertyList";
 
 type PageProps = {
   params: Promise<{ kind: PropertyKind }>;
@@ -10,12 +11,13 @@ export default async function PropertyKindPage({
   params,
   searchParams,
 }: PageProps) {
-  const resolvedParams = await params;
-  const kind = resolvedParams.kind;
+  const { kind } = await params;
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 py-10">
-      <PropertyList searchParams={searchParams} kind={kind} />
-    </main>
+    <PageWrapper>
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 py-10">
+        <PropertyList searchParams={searchParams} kind={kind} />
+      </main>
+    </PageWrapper>
   );
 }

@@ -2,12 +2,17 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import PropertyBookerCard from "@/components/PropertyBookerCard";
-import type { Property } from "@/types/property";
 import { deleteProperty } from "@/utils/propertyService";
+import type { Property } from "@/types/property";
+import PropertyBookerCard from "@/components/PropertyBookerCard";
+import Link from "next/link";
+import T from "@/components/typography";
 
-export default function PropertyActionBox({ property }: { property: Property }) {
+export default function PropertyActionBox({
+  property,
+}: {
+  property: Property;
+}) {
   const { user } = useAuth();
   const router = useRouter();
 
@@ -29,27 +34,26 @@ export default function PropertyActionBox({ property }: { property: Property }) 
 
   if (isOwner) {
     return (
-      <div className="flex flex-col gap-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 bg-zinc-50 dark:bg-zinc-900 shadow-sm">
+      <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <div>
-          <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
-            Manage your property
-          </h3>
-          <p className="text-xs text-zinc-500 mt-1">
-            You are the owner of this stay. You can edit details or remove it entirely.
+          <T.Header size="sm">Manage your property</T.Header>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+            You are the owner of this stay. You can edit details or remove it
+            entirely.
           </p>
         </div>
 
         <div className="flex flex-col gap-2.5">
           <Link
             href={`/properties/${property.property_id}/edit`}
-            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 transition"
+            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition"
           >
             Edit Property
           </Link>
-          
+
           <button
             onClick={handleDelete}
-            className="w-full rounded-xl bg-red-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-700 transition"
+            className="w-full rounded-xl bg-red-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-700 transition"
           >
             Delete Property
           </button>

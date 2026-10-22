@@ -1,11 +1,12 @@
-import PropertyCard from "./PropertyCard";
-import PropertyFilter from "./PropertyFilter";
-import { getProperties, getPropertiesByKind } from "@/utils/propertyService";
 import type {
   Property,
   PropertyKind,
   PropertyListFilter,
 } from "@/types/property";
+import { getProperties, getPropertiesByKind } from "@/utils/propertyService";
+import PropertyCard from "./PropertyCard";
+import PropertyFilter from "./PropertyFilter";
+import ErrorMessage from "./ErrorMessage";
 import T from "./typography";
 
 type PropertyListProps = {
@@ -45,21 +46,19 @@ export default async function PropertyList({
     errorMessage = error.message || "Failed to fetch properties";
   }
 
+  const titleText = kind
+    ? `${kind.charAt(0).toUpperCase() + kind.slice(1)}s`
+    : "Find your perfect stay";
+
   return (
-    <div className="flex flex-col gap-8 max-w-6xl mx-auto px-4 py-8">
-      <div className="flex flex-col items-center gap-4 text-center">
-        <T.Header size="lg">
-          {kind ? `${kind.toLocaleUpperCase()}S` : "Find your perfect stay"}
-        </T.Header>
+    <div className="flex flex-col gap-8 w-full py-4">
+      <div className="flex flex-col items-center gap-2 text-center">
+        <T.Header size="lg">{titleText}</T.Header>
       </div>
 
       <PropertyFilter filter={filters} />
 
-      {errorMessage && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-400">
-          {errorMessage}
-        </div>
-      )}
+      <ErrorMessage message={errorMessage} />
 
       {!errorMessage && properties.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-zinc-300 py-16 text-center dark:border-zinc-800">
@@ -72,7 +71,7 @@ export default async function PropertyList({
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {properties.map((property) => (
             <PropertyCard key={property.property_id} property={property} />
           ))}

@@ -46,7 +46,12 @@ export async function getUserProperties(): Promise<Property[]> {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch your properties");
+    const errorData = await response.json().catch(() => null);
+    throw new Error(
+      errorData?.message ||
+        errorData?.error ||
+        "Failed to fetch your properties",
+    );
   }
 
   return response.json();
@@ -147,8 +152,12 @@ export async function createProperty(
   }
 
   if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
     return {
-      error: "Could not create the stay. Check the fields and try again.",
+      error:
+        errorData?.message ||
+        errorData?.error ||
+        "Could not create the stay. Check the fields and try again.",
     };
   }
 
@@ -195,8 +204,12 @@ export async function updateProperty(
   }
 
   if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
     return {
-      error: "Could not update the stay. Check the fields and try again.",
+      error:
+        errorData?.message ||
+        errorData?.error ||
+        "Could not update the stay. Check the fields and try again.",
     };
   }
 
@@ -220,7 +233,11 @@ export async function deleteProperty(
   }
 
   if (!response.ok) {
-    return { error: "Could not delete the stay." };
+    const errorData = await response.json().catch(() => null);
+    return {
+      error:
+        errorData?.message || errorData?.error || "Could not delete the stay.",
+    };
   }
 
   return {};

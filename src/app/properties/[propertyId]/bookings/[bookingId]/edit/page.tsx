@@ -2,11 +2,13 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import T from "@/components/typography";
-import BookingForm from "@/components/BookingForm";
 import { useAuth } from "@/contexts/AuthContext";
-import { getBookingById, updateGuestBooking } from "@/utils/bookingService";
 import type { Booking } from "@/types/booking";
+import { getBookingById, updateGuestBooking } from "@/utils/bookingService";
+import PageWrapper from "@/components/PageWrapper";
+import BookingForm from "@/components/BookingForm";
+import ErrorMessage from "@/components/ErrorMessage";
+import T from "@/components/typography";
 
 export default function EditBookingPage({
   params,
@@ -14,37 +16,36 @@ export default function EditBookingPage({
   params: Promise<{ propertyId: string; bookingId: string }>;
 }) {
   const { propertyId, bookingId } = use(params);
+
   const router = useRouter();
-  const { user, isLoading: isAuthLoading } = useAuth();
+
+  const { user } = useAuth();
 
   const [booking, setBooking] = useState<Booking | null>(null);
+
   const [loadingData, setLoadingData] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isAuthLoading && !user) {
-      router.push("/auth/login");
-    }
-  }, [user, isAuthLoading, router]);
+    if (!user || !bookingId) return;
 
-  useEffect(() => {
-    if (user && bookingId) {
-      async function fetchBooking() {
-        try {
-          setLoadingData(true);
-          const fetchedBooking = await getBookingById(bookingId);
-          setBooking(fetchedBooking);
-        } catch (err) {
-          setError("Failed to load booking details.");
-        } finally {
-          setLoadingData(false);
-        }
+    async function fetchBooking() {
+      try {
+        setLoadingData(true);
+
+        const fetchedBooking = await getBookingById(bookingId);
+
+        setBooking(fetchedBooking);
+      } catch (error) {
+        setError("Failed to load booking details.");
+      } finally {
+        setLoadingData(false);
       }
-      fetchBooking();
     }
+    fetchBooking();
   }, [user, bookingId]);
 
-  async function onUpdate(data: {
+  async function onUpdate(bookingData: {
     check_in?: string;
     check_out?: string;
     guests?: number;
@@ -52,45 +53,37 @@ export default function EditBookingPage({
     guest_email?: string;
   }) {
     setError(null);
+
     try {
-      await updateGuestBooking(propertyId, bookingId, data as Partial<Booking>);
+      await updateGuestBooking(propertyId, bookingId, bookingData as Partial<Booking>);
+
       router.push("/profile");
+
       return { success: true };
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Could not update booking.";
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Could not update booking.";
+
       setError(message);
+
       return { error: message };
     }
   }
 
-  if (isAuthLoading || loadingData) {
-    return (
-      <div className="flex flex-1 items-center justify-center py-20">
-        <p>Loading booking...</p>
-      </div>
-    );
-  }
-
-  if (!user || !booking) {
-    return (
-      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-10">
-        <p className="text-red-500">Booking not found or failed to load.</p>
-      </div>
-    );
-  }
-
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-10">
-      <T.Header size="lg">Edit Booking</T.Header>
+    <PageWrapper>
+      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-10">
+        <T.Header size="lg">Edit Booking</T.Header>
 
-      {error && (
-        <div className="rounded-lg bg-red-50 p-4 text-red-600 border border-red-200 text-sm">
-          {error}
-        </div>
-      )}
+        <ErrorMessage message={error} />
 
-      <BookingForm initialData={booking} action={onUpdate} />
-    </main>
+        {loadingData ? (
+          <p className="text-sm text-zinc-500">Loading booking...</p>
+        ) : !booking ? (
+          <p className="text-sm text-red-500">Booking not found.</p>
+        ) : (
+          <BookingForm initialData={booking} action={onUpdate} />
+        )}
+      </main>
+    </PageWrapper>
   );
 }

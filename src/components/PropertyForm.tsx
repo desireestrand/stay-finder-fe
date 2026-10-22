@@ -1,13 +1,14 @@
 "use client";
 
-import { SubmitEvent, useState } from "react";
+import { SubmitEvent } from "react";
+import { useState } from "react";
 import type {
   CreatePropertyState,
   UpdatePropertyState,
 } from "@/utils/propertyService";
+import ErrorMessage from "@/components/ErrorMessage";
 
-const fieldClassName =
-  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300 dark:focus:ring-zinc-300";
+const fieldClassName = "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-zinc-300 dark:focus:ring-zinc-300";
 
 export type PropertyFormValues = {
   title?: string;
@@ -53,7 +54,7 @@ export default function PropertyForm({
         setError(result.error);
       }
     } catch (error) {
-      setError("Could not create property.");
+      setError("Could not save property.");
     } finally {
       setPending(false);
     }
@@ -155,7 +156,7 @@ export default function PropertyForm({
               className={fieldClassName}
             />
           </label>
-          
+
           <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
             Price per night (SEK)
             <input
@@ -171,11 +172,7 @@ export default function PropertyForm({
         </div>
       </div>
 
-      {error && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-950/50 dark:text-red-400">
-          {error}
-        </div>
-      )}
+      <ErrorMessage message={error} />
 
       <button
         type="submit"

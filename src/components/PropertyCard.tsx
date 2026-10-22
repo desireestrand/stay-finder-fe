@@ -14,7 +14,7 @@ export default function PropertyCard({
 }: PropertyCardProps) {
   const imageUrl =
     property.image_url ||
-    "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=1000&auto=format&fit=crop";
+    "https://img.magnific.com/premium-vector/silhouette-skyline-illustration_53876-78792.jpg?semt=ais_hybrid&w=740&q=80";
 
   return (
     <Link
@@ -39,16 +39,18 @@ export default function PropertyCard({
           )}
         </div>
 
-        <div className="flex flex-col p-5 justify-between gap-4">
+        <div className="flex flex-col p-5 justify-between flex-1 gap-4">
           <div>
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="font-semibold text-zinc-900 group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300 transition-colors line-clamp-1">
-                {property.title}
-              </h3>
-            </div>
+            <T.Header
+              size="sm"
+              className="line-clamp-1 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors"
+            >
+              {property.title}
+            </T.Header>
 
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              {property.city}, {property.country} · Max {property.max_guests} guests
+              {property.city}, {property.country} · Max {property.max_guests}{" "}
+              guests
             </p>
           </div>
 
@@ -57,8 +59,7 @@ export default function PropertyCard({
               <span className="text-base font-bold text-zinc-900 dark:text-zinc-100">
                 {property.price_per_night} SEK
               </span>
-
-              <span className="text-zinc-500 dark:text-zinc-400">
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">
                 {" "}
                 / night
               </span>
