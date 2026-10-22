@@ -1,25 +1,55 @@
 "use client";
 
 import { useState } from "react";
-import type { BookingDates } from "@/types/booking";
+import type { BookingDates, Booking } from "@/types/booking";
 
 type BookingFormProps = {
-  propertyId: string;
+  propertyId?: string;
+  bookingId?: string;
+  initialData?: Booking;
   dates?: BookingDates;
   onBookingComplete?: () => void;
+  action?: (data: {
+    check_in?: string;
+    check_out?: string;
+    guests?: number;
+    guest_name?: string;
+    guest_email?: string;
+  }) => Promise<{ error?: string; success?: boolean }>;
 };
 
-export default function BookingForm({ propertyId, dates, onBookingComplete }: BookingFormProps) {
-  const [guestName, setGuestName] = useState("");
-  const [guestEmail, setGuestEmail] = useState("");
-  const [guests, setGuests] = useState(1);
+export default function BookingForm({
+  propertyId,
+  bookingId,
+  initialData,
+  dates,
+  onBookingComplete,
+  action,
+}: BookingFormProps) {
+  const [guestName, setGuestName] = useState(initialData?.guest_name || "");
+  const [guestEmail, setGuestEmail] = useState(initialData?.guest_email || "");
+  const [guests, setGuests] = useState(initialData?.guests || 1);
+
+  const [checkIn, setCheckIn] = useState(
+    initialData?.check_in || dates?.check_in || "",
+  );
+  const [checkOut, setCheckOut] = useState(
+    initialData?.check_out || dates?.check_out || "",
+  );
+
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!dates) {
+
+    if (!checkIn || !checkOut) {
       setError("Please select check-in and check-out dates.");
+      return;
+    }
+
+    if (new Date(checkOut) <= new Date(checkIn)) {
+      setError("Check-out date must be after check-in date.");
       return;
     }
 
@@ -27,26 +57,40 @@ export default function BookingForm({ propertyId, dates, onBookingComplete }: Bo
     setError(null);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/bookings/properties/${propertyId}`,
-        {
+      if (action) {
+        const result = await action({
+          guest_name: guestName,
+          guest_email: guestEmail,
+          check_in: checkIn,
+          check_out: checkOut,
+          guests,
+        });
+
+        if (result?.error) {
+          throw new Error(result.error);
+        }
+      } else {
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/bookings/properties/${propertyId}`;
+        const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({
             guest_name: guestName,
             guest_email: guestEmail,
-            check_in: dates.check_in,
-            check_out: dates.check_out,
+            check_in: checkIn,
+            check_out: checkOut,
             guests,
             status: "pending",
           }),
-        }
-      );
+        });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Failed to create booking");
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(
+            data.message || data.error || "Failed to create booking",
+          );
+        }
       }
 
       onBookingComplete?.();
@@ -69,6 +113,7 @@ export default function BookingForm({ propertyId, dates, onBookingComplete }: Bo
           className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
         />
       </div>
+
       <div className="flex flex-col gap-1 text-sm">
         <label>Guest Email</label>
         <input
@@ -79,6 +124,31 @@ export default function BookingForm({ propertyId, dates, onBookingComplete }: Bo
           className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
         />
       </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-1 text-sm">
+          <label>Check-in</label>
+          <input
+            type="date"
+            required
+            value={checkIn}
+            onChange={(e) => setCheckIn(e.target.value)}
+            className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1 text-sm">
+          <label>Check-out</label>
+          <input
+            type="date"
+            required
+            value={checkOut}
+            onChange={(e) => setCheckOut(e.target.value)}
+            className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+          />
+        </div>
+      </div>
+
       <div className="flex flex-col gap-1 text-sm">
         <label>Number of Guests</label>
         <input
@@ -90,13 +160,15 @@ export default function BookingForm({ propertyId, dates, onBookingComplete }: Bo
           className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
         />
       </div>
+
       {error && <p className="text-sm text-red-500">{error}</p>}
+
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900"
+        className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900 transition disabled:opacity-50"
       >
-        {pending ? "Booking..." : "Confirm Booking"}
+        {pending ? "Saving..." : bookingId ? "Save Changes" : "Confirm Booking"}
       </button>
     </form>
   );

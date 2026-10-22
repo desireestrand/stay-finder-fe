@@ -6,10 +6,10 @@ import T from "@/components/typography";
 
 export default async function PropertyPage({
   params,
-}: PageProps<"/properties/[id]">) {
-  const { id } = await params;
+}: PageProps<"/properties/[propertyId]">) {
+  const { propertyId } = await params;
 
-  const property = await getPropertyById(id);
+  const property = await getPropertyById(propertyId);
 
   if (!property) {
     notFound();
