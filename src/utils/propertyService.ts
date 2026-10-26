@@ -113,6 +113,10 @@ export async function getPropertyById(id: string): Promise<Property | null> {
     const response = await fetch(url, { cache: "no-store" });
 
     if (!response.ok) {
+      if (response.status === 404) {
+        return null;
+      }
+      
       const message = await parseErrorResponse(
         response,
         "Failed to fetch property",
