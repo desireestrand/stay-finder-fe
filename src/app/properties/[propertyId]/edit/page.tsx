@@ -3,10 +3,12 @@
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Property } from "@/types/property";
+import type { Property, PropertyKind } from "@/types/property"; // Importera PropertyKind
 import { getPropertyById, updateProperty } from "@/utils/propertyService";
 import PageWrapper from "@/components/PageWrapper";
-import PropertyForm from "@/components/PropertyForm";
+import PropertyForm, {
+  type PropertyFormValues,
+} from "@/components/PropertyForm";
 import ErrorMessage from "@/components/ErrorMessage";
 import T from "@/components/typography";
 
@@ -75,6 +77,13 @@ export default function EditPropertyPage({
     }
   }
 
+  const formValues: PropertyFormValues | undefined = property
+    ? {
+        ...property,
+        kind: property.kind as PropertyKind,
+      }
+    : undefined;
+
   return (
     <PageWrapper>
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-10">
@@ -91,7 +100,7 @@ export default function EditPropertyPage({
         ) : (
           <PropertyForm
             action={onUpdate}
-            values={property}
+            values={formValues}
             submitLabel="Save changes"
             pendingLabel="Saving..."
           />
