@@ -1,4 +1,4 @@
-import type { Booking } from "@/types/booking";
+import type { Booking, BookingStatus } from "@/types/booking";
 
 interface UserIncomingBookingsListProps {
   bookings: Booking[];
@@ -6,7 +6,7 @@ interface UserIncomingBookingsListProps {
   onUpdateBookingStatus: (
     propertyId: string,
     bookingId: string,
-    status: "confirmed" | "cancelled",
+    status: BookingStatus,
   ) => void;
   onDeleteBooking: (propertyId: string, bookingId: string) => void;
 }

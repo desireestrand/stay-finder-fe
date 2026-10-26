@@ -1,4 +1,4 @@
-import type { Booking, NewBooking } from "@/types/booking";
+import type { Booking, BookingStatus, NewBooking } from "@/types/booking";
 import { parseErrorResponse } from "./error";
 
 export async function getUserBookings(): Promise<Booking[]> {
@@ -66,15 +66,7 @@ export async function getBookingById(bookingId: string): Promise<Booking> {
 
 export async function createBooking(
   propertyId: string,
-  bookingData: {
-    property_id: string;
-    guest_name: string;
-    guest_email: string;
-    check_in: string;
-    check_out: string;
-    guests: number;
-    status?: string;
-  },
+  bookingData: NewBooking,
 ): Promise<Booking> {
   const url = new URL(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/properties/${propertyId}`,
@@ -103,7 +95,7 @@ export async function createBooking(
 export async function updateBookingStatus(
   propertyId: string,
   bookingId: string,
-  status: "confirmed" | "cancelled",
+  status: BookingStatus,
 ): Promise<Booking> {
   const url = new URL(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/properties/${propertyId}/${bookingId}`,
@@ -132,7 +124,7 @@ export async function updateBookingStatus(
 export async function updateGuestBooking(
   propertyId: string,
   bookingId: string,
-  updates: Partial<NewBooking>,
+  updates: Partial<NewBooking>& { status?: BookingStatus },
 ): Promise<Booking> {
   const url = new URL(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/properties/${propertyId}/${bookingId}`,

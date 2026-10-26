@@ -3,7 +3,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import type { Property } from "@/types/property";
-import type { Booking } from "@/types/booking";
+import type { Booking, BookingStatus } from "@/types/booking";
 import { deleteProperty, getUserProperties } from "@/utils/propertyService";
 import {
   getUserBookings,
@@ -119,7 +119,7 @@ export default function ProfilePage() {
   async function handleBookingStatusUpdate(
     propertyId: string,
     bookingId: string,
-    newStatus: "confirmed" | "cancelled",
+    newStatus: BookingStatus,
   ) {
     setError(null);
 

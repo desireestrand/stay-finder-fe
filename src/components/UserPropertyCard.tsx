@@ -1,5 +1,5 @@
 import type { Property } from "@/types/property";
-import type { Booking } from "@/types/booking";
+import type { Booking, BookingStatus } from "@/types/booking";
 import UserIncomingBookingsList from "./UserIncomingBookingsList";
 import Link from "next/link";
 import T from "./typography";
@@ -11,7 +11,7 @@ interface UserPropertyCardProps {
   onUpdateBookingStatus: (
     propertyId: string,
     bookingId: string,
-    status: "confirmed" | "cancelled",
+    status: BookingStatus,
   ) => void;
   onDeleteBooking: (propertyId: string, bookingId: string) => void;
 }

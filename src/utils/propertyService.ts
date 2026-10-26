@@ -104,10 +104,10 @@ export async function getPropertiesByKind(
   return response.json();
 }
 
-export async function getPropertyById(id: string): Promise<Property | null> {
+export async function getPropertyById(propertyId: string): Promise<Property | null> {
   try {
     const url = new URL(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/${id}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/${propertyId}`,
     );
 
     const response = await fetch(url, { cache: "no-store" });
@@ -116,7 +116,7 @@ export async function getPropertyById(id: string): Promise<Property | null> {
       if (response.status === 404) {
         return null;
       }
-      
+
       const message = await parseErrorResponse(
         response,
         "Failed to fetch property",

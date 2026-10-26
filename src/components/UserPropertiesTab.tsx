@@ -1,5 +1,5 @@
 import type { Property } from "@/types/property";
-import type { Booking } from "@/types/booking";
+import type { Booking, BookingStatus } from "@/types/booking";
 import UserPropertyCard from "./UserPropertyCard";
 import Link from "next/link";
 
@@ -10,7 +10,7 @@ interface UserPropertiesTabProps {
   onUpdateBookingStatus: (
     propertyId: string,
     bookingId: string,
-    status: "confirmed" | "cancelled",
+    status: BookingStatus,
   ) => void;
   onDeleteBooking: (propertyId: string, bookingId: string) => void;
 }
