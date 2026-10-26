@@ -1,4 +1,5 @@
 import type { Booking } from "@/types/booking";
+import { parseErrorResponse } from "./error";
 
 export async function getUserBookings(): Promise<Booking[]> {
   const url = new URL(`${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/me`);
@@ -9,10 +10,11 @@ export async function getUserBookings(): Promise<Booking[]> {
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      errorData?.message || errorData?.error || "Failed to fetch your bookings",
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch your bookings",
     );
+    throw new Error(message);
   }
 
   return response.json();
@@ -31,12 +33,11 @@ export async function getPropertyBookings(
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      errorData?.message ||
-        errorData?.error ||
-        "Failed to fetch bookings for property",
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch bookings for property",
     );
+    throw new Error(message);
   }
 
   return response.json();
@@ -53,10 +54,11 @@ export async function getBookingById(bookingId: string): Promise<Booking> {
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      errorData?.message || errorData?.error || "Failed to fetch booking",
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch booking",
     );
+    throw new Error(message);
   }
 
   return response.json();
@@ -88,8 +90,11 @@ export async function createBooking(
   });
 
   if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    throw new Error(data.message || data.error || "Failed to create booking");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to create booking",
+    );
+    throw new Error(message);
   }
 
   return response.json();
@@ -114,12 +119,11 @@ export async function updateBookingStatus(
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      errorData?.message ||
-        errorData?.error ||
-        "Failed to update booking status",
+    const message = await parseErrorResponse(
+      response,
+      "Failed to update booking status",
     );
+    throw new Error(message);
   }
 
   return response.json();
@@ -151,10 +155,11 @@ export async function updateGuestBooking(
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      errorData?.message || errorData?.error || "Failed to update booking",
+    const message = await parseErrorResponse(
+      response,
+      "Failed to update booking",
     );
+    throw new Error(message);
   }
 
   return response.json();
@@ -174,10 +179,11 @@ export async function deleteBooking(
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      errorData?.message || errorData?.error || "Failed to delete booking",
+    const message = await parseErrorResponse(
+      response,
+      "Failed to delete booking",
     );
+    throw new Error(message);
   }
 
   return true;

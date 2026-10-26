@@ -4,6 +4,7 @@ import type {
   PropertyListFilter,
 } from "@/types/property";
 import type { PaginatedListResponse } from "@/types/global";
+import { parseErrorResponse } from "./error";
 
 export type CreatePropertyState = {
   error?: string;
@@ -46,12 +47,11 @@ export async function getUserProperties(): Promise<Property[]> {
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      errorData?.message ||
-        errorData?.error ||
-        "Failed to fetch your properties",
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch your properties",
     );
+    throw new Error(message);
   }
 
   return response.json();
@@ -71,7 +71,11 @@ export async function getProperties(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch properties");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch properties",
+    );
+    throw new Error(message);
   }
 
   return response.json();
@@ -90,7 +94,11 @@ export async function getPropertiesByKind(
   const response = await fetch(url, { cache: "no-store" });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch properties by kind");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch properties by kind",
+    );
+    throw new Error(message);
   }
 
   return response.json();
@@ -105,7 +113,11 @@ export async function getPropertyById(id: string): Promise<Property | null> {
     const response = await fetch(url, { cache: "no-store" });
 
     if (!response.ok) {
-      return null;
+      const message = await parseErrorResponse(
+        response,
+        "Failed to fetch property",
+      );
+      throw new Error(message);
     }
 
     return response.json();
@@ -152,13 +164,11 @@ export async function createProperty(
   }
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    return {
-      error:
-        errorData?.message ||
-        errorData?.error ||
-        "Could not create the stay. Check the fields and try again.",
-    };
+    const message = await parseErrorResponse(
+      response,
+      "Could not create the stay. Check the fields and try again.",
+    );
+    throw new Error(message);
   }
 
   const property: Property = await response.json();
@@ -204,13 +214,11 @@ export async function updateProperty(
   }
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    return {
-      error:
-        errorData?.message ||
-        errorData?.error ||
-        "Could not update the stay. Check the fields and try again.",
-    };
+    const message = await parseErrorResponse(
+      response,
+      "Could not update the stay. Check the fields and try again.",
+    );
+    throw new Error(message);
   }
 
   const property: Property = await response.json();
@@ -233,11 +241,11 @@ export async function deleteProperty(
   }
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    return {
-      error:
-        errorData?.message || errorData?.error || "Could not delete the stay.",
-    };
+    const message = await parseErrorResponse(
+      response,
+      "Could not delete stay.",
+    );
+    throw new Error(message);
   }
 
   return {};

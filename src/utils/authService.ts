@@ -1,3 +1,5 @@
+import { parseErrorResponse } from "./error";
+
 export async function login(
   email: string,
   password: string,
@@ -17,8 +19,7 @@ export async function login(
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    return errorData?.message || errorData?.error || "Invalid credentials";
+    return await parseErrorResponse(response, "Invalid credentials");
   }
 
   return true;
@@ -40,8 +41,7 @@ export async function signup(
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    return errorData?.message || errorData?.error || "Failed to register account";
+    return await parseErrorResponse(response, "Failed to register account");
   }
 
   return true;
