@@ -9,12 +9,12 @@ export async function parseErrorResponse(
 
     if (Array.isArray(data.errors) && data.errors.length > 0) {
       const formattedErrors = data.errors
-        .map((err: unknown) => {
-          if (Array.isArray(err) && err.length >= 2) {
-            const [field, message] = err;
-            return `${field}: ${message}`;
+        .map((error: unknown) => {
+          if (Array.isArray(error) && error.length >= 2) {
+            const [, message] = error;
+            return typeof message === "string" ? message : null;
           }
-          if (typeof err === "string") return err;
+          if (typeof error === "string") return error;
           return null;
         })
         .filter(Boolean);

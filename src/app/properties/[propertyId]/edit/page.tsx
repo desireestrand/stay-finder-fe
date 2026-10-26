@@ -9,7 +9,6 @@ import PageWrapper from "@/components/PageWrapper";
 import PropertyForm, {
   type PropertyFormValues,
 } from "@/components/PropertyForm";
-import ErrorMessage from "@/components/ErrorMessage";
 import T from "@/components/typography";
 
 export default function EditPropertyPage({
@@ -18,15 +17,12 @@ export default function EditPropertyPage({
   params: Promise<{ propertyId: string }>;
 }) {
   const { propertyId } = use(params);
-
   const router = useRouter();
-
   const { user } = useAuth();
 
   const [property, setProperty] = useState<Property | null>(null);
-
   const [loadingProperty, setLoadingProperty] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user || !propertyId) return;
@@ -37,7 +33,7 @@ export default function EditPropertyPage({
         const data = await getPropertyById(propertyId);
 
         if (!data) {
-          setError("Property not found.");
+          setLoadError("Property not found.");
         } else if (data.user_id !== user?.id) {
           router.push("/");
           return;
@@ -49,7 +45,7 @@ export default function EditPropertyPage({
           error instanceof Error
             ? error.message
             : "Failed to load property details.";
-        setError(message);
+        setLoadError(message);
       } finally {
         setLoadingProperty(false);
       }
@@ -58,8 +54,6 @@ export default function EditPropertyPage({
   }, [propertyId, user, router]);
 
   async function onUpdate(formData: FormData) {
-    setError(null);
-
     try {
       const result = await updateProperty(propertyId, formData);
 
@@ -71,7 +65,6 @@ export default function EditPropertyPage({
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Failed to update property.";
-      setError(message);
       return { error: message };
     }
   }
@@ -90,10 +83,10 @@ export default function EditPropertyPage({
           {property ? `Edit stay: ${property.title}` : "Edit stay"}
         </T.Header>
 
-        <ErrorMessage message={error} />
-
         {loadingProperty ? (
           <p className="text-sm text-zinc-500">Loading property...</p>
+        ) : loadError ? (
+          <p className="text-sm text-red-500">{loadError}</p>
         ) : !property ? (
           <p className="text-sm text-red-500">Property not found.</p>
         ) : (

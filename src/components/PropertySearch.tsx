@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { Property } from "@/types/property";
 import PropertyCard from "./PropertyCard";
 
-type PropertySearchProps = {
+interface PropertySearchProps {
   properties: Property[];
 };
 
