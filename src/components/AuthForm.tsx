@@ -10,7 +10,7 @@ import T from "./typography";
 
 interface AuthFormProps {
   mode: "login" | "signup";
-};
+}
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const auth = useAuth();
@@ -55,7 +55,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   return (
     <div className="flex flex-1 items-center justify-center px-4 py-12">
       <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-black">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form noValidate onSubmit={handleSubmit} className="space-y-6">
           <div className="text-center">
             <T.Header size="lg">
               {isLogin ? "Log in to StayFinder" : "Create an account"}

@@ -16,7 +16,7 @@ interface BookingFormProps {
   action?: (
     data: Partial<NewBooking>,
   ) => Promise<{ error?: string; success?: boolean }>;
-};
+}
 
 export default function BookingForm({
   propertyId,
@@ -121,7 +121,7 @@ export default function BookingForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+    <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1 text-sm">
         <label className="font-medium text-zinc-700 dark:text-zinc-300">
           Guest Name
