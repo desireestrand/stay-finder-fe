@@ -8,7 +8,7 @@ import ErrorMessage from "./ErrorMessage";
 import Link from "next/link";
 import T from "./typography";
 
-type AuthFormProps = {
+interface AuthFormProps {
   mode: "login" | "signup";
 };
 

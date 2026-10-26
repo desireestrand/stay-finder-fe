@@ -1,12 +1,16 @@
 "use client";
 
-import { PropertyListFilter, PropertySortBy, SortOrder } from "@/types/property";
+import {
+  PropertyListFilter,
+  PropertySortBy,
+  SortOrder,
+} from "@/types/property";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, SetStateAction, Dispatch } from "react";
 import ErrorMessage from "@/components/ErrorMessage";
 import type { SubmitEvent } from "react";
 
-type SearchBarProps = {
+interface SearchBarProps {
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
   placeholder?: string;
@@ -24,7 +28,7 @@ function Searchbar({ search, setSearch, placeholder }: SearchBarProps) {
   );
 }
 
-type PropertyFilterProps = {
+interface PropertyFilterProps {
   filter: PropertyListFilter;
 };
 
@@ -33,7 +37,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("sv-SE");
 
   const [error, setError] = useState<string | null>(null);
 
@@ -53,8 +57,12 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
   const [startDate, setStartDate] = useState(filter.start_date || "");
   const [endDate, setEndDate] = useState(filter.end_date || "");
 
-  const [sortBy, setSortBy] = useState<PropertySortBy>(filter.sort_by || "created_at");
-  const [sortOrder, setSortOrder] = useState<SortOrder>(filter.sort_order || "desc");
+  const [sortBy, setSortBy] = useState<PropertySortBy>(
+    filter.sort_by || "created_at",
+  );
+  const [sortOrder, setSortOrder] = useState<SortOrder>(
+    filter.sort_order || "desc",
+  );
 
   useEffect(() => {
     setQ(filter.q || "");
@@ -175,9 +183,9 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
                 onChange={(e) => setStartDate(e.target.value)}
                 className="h-10 w-full sm:w-1/2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-zinc-300"
               />
-              
+
               <span className="text-zinc-400 hidden sm:inline">-</span>
-              
+
               <input
                 type="date"
                 value={endDate}
@@ -204,7 +212,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
               />
 
               <span className="text-zinc-400">-</span>
-              
+
               <input
                 type="number"
                 min={0}
@@ -237,7 +245,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
             <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
               Order
             </label>
-            
+
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as SortOrder)}

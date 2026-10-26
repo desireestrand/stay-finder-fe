@@ -3,7 +3,7 @@ import { cn } from "@/utils/cn";
 import Link from "next/link";
 import T from "./typography";
 
-type PropertyCardProps = {
+interface PropertyCardProps {
   property: Property;
   className?: string;
 };

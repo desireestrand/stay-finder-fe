@@ -2,7 +2,7 @@ import type { PropertyKind } from "@/types/property";
 import PageWrapper from "@/components/PageWrapper";
 import PropertyList from "@/components/PropertyList";
 
-type PageProps = {
+interface PageProps {
   params: Promise<{ kind: PropertyKind }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };

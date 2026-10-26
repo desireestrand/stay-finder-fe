@@ -4,7 +4,7 @@ import PageWrapper from "@/components/PageWrapper";
 import ErrorMessage from "@/components/ErrorMessage";
 import T from "@/components/typography";
 
-type ErrorPageProps = {
+interface ErrorPageProps {
   error: Error & { digest?: string };
   reset: () => void;
 };

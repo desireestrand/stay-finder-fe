@@ -11,7 +11,7 @@ import PropertyFilter from "./PropertyFilter";
 import ErrorMessage from "./ErrorMessage";
 import T from "./typography";
 
-type PropertyListProps = {
+interface PropertyListProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
   kind?: PropertyKind;
 };

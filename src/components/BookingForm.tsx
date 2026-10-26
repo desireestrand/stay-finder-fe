@@ -6,7 +6,7 @@ import type { BookingDates, Booking, NewBooking } from "@/types/booking";
 import { createBooking } from "@/utils/bookingService";
 import ErrorMessage from "@/components/ErrorMessage";
 
-type BookingFormProps = {
+interface BookingFormProps {
   propertyId?: string;
   bookingId?: string;
   pricePerNight?: number;
