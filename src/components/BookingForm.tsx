@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { SubmitEvent } from "react";
-import type { BookingDates, Booking } from "@/types/booking";
+import type { BookingDates, Booking, NewBooking } from "@/types/booking";
 import { createBooking } from "@/utils/bookingService";
 import ErrorMessage from "@/components/ErrorMessage";
 
@@ -13,13 +13,9 @@ type BookingFormProps = {
   initialData?: Booking;
   dates?: BookingDates;
   onBookingComplete?: () => void;
-  action?: (data: {
-    check_in?: string;
-    check_out?: string;
-    guests?: number;
-    guest_name?: string;
-    guest_email?: string;
-  }) => Promise<{ error?: string; success?: boolean }>;
+  action?: (
+    data: Partial<NewBooking>,
+  ) => Promise<{ error?: string; success?: boolean }>;
 };
 
 export default function BookingForm({
@@ -44,7 +40,7 @@ export default function BookingForm({
 
   const calculateNights = (checkInStr: string, checkOutStr: string) => {
     if (!checkInStr || !checkOutStr) return 0;
-    
+
     const start = new Date(checkInStr);
     const end = new Date(checkOutStr);
 

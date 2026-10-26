@@ -3,7 +3,7 @@
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Booking } from "@/types/booking";
+import type { Booking, NewBooking } from "@/types/booking";
 import { getBookingById, updateGuestBooking } from "@/utils/bookingService";
 import PageWrapper from "@/components/PageWrapper";
 import BookingForm from "@/components/BookingForm";
@@ -45,23 +45,22 @@ export default function EditBookingPage({
     fetchBooking();
   }, [user, bookingId]);
 
-  async function onUpdate(bookingData: {
-    check_in?: string;
-    check_out?: string;
-    guests?: number;
-    guest_name?: string;
-    guest_email?: string;
-  }) {
+  async function onUpdate(bookingData: Partial<NewBooking>) {
     setError(null);
 
     try {
-      await updateGuestBooking(propertyId, bookingId, bookingData as Partial<Booking>);
+      await updateGuestBooking(
+        propertyId,
+        bookingId,
+        bookingData,
+      );
 
       router.push("/profile");
 
       return { success: true };
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Could not update booking.";
+      const message =
+        error instanceof Error ? error.message : "Could not update booking.";
 
       setError(message);
 
