@@ -17,20 +17,15 @@ export default function NewPropertyPage() {
     setError(null);
 
     try {
-      const result = await createProperty(formData);
+      const property = await createProperty(formData);
 
-      if (result.error) {
-        setError(result.error);
-        return { error: result.error };
-      }
-
-      if (result.propertyId) {
-        router.push(`/properties/${result.propertyId}`);
+      if (property?.property_id) {
+        router.push(`/properties/${property.property_id}`);
       }
 
       return { success: true };
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Could not create property.";
+      const message = error instanceof Error ? error.message : "Failed to create property.";
       setError(message);
       return { error: message };
     }

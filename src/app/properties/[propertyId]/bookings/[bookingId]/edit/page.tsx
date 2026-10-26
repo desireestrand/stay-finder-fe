@@ -37,7 +37,11 @@ export default function EditBookingPage({
 
         setBooking(fetchedBooking);
       } catch (error) {
-        setError("Failed to load booking details.");
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Failed to load booking details.";
+        setError(message);
       } finally {
         setLoadingData(false);
       }
@@ -49,18 +53,14 @@ export default function EditBookingPage({
     setError(null);
 
     try {
-      await updateGuestBooking(
-        propertyId,
-        bookingId,
-        bookingData,
-      );
+      await updateGuestBooking(propertyId, bookingId, bookingData);
 
       router.push("/profile");
 
       return { success: true };
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Could not update booking.";
+        error instanceof Error ? error.message : "Failed to update booking.";
 
       setError(message);
 

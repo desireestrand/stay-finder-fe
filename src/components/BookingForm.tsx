@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SubmitEvent } from "react";
+import type { SubmitEvent } from "react";
 import type { BookingDates, Booking, NewBooking } from "@/types/booking";
 import { createBooking } from "@/utils/bookingService";
 import ErrorMessage from "@/components/ErrorMessage";
@@ -112,7 +112,9 @@ export default function BookingForm({
 
       onBookingComplete?.();
     } catch (error) {
-      setError((error as Error).message);
+      const message =
+        error instanceof Error ? error.message : "Failed to process booking.";
+      setError(message);
     } finally {
       setPending(false);
     }

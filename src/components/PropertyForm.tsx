@@ -1,15 +1,12 @@
 "use client";
 
-import { SubmitEvent } from "react";
+import type { SubmitEvent } from "react";
 import { useState } from "react";
-import type {
-  CreatePropertyState,
-  UpdatePropertyState,
-} from "@/utils/propertyService";
 import ErrorMessage from "@/components/ErrorMessage";
-import { PropertyKind } from "@/types/property";
+import type { PropertyKind } from "@/types/property";
 
-const fieldClassName = "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-zinc-300 dark:focus:ring-zinc-300";
+const fieldClassName =
+  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-zinc-300 dark:focus:ring-zinc-300";
 
 export type PropertyFormValues = {
   title?: string;
@@ -22,14 +19,14 @@ export type PropertyFormValues = {
   image_url?: string | null;
 };
 
-type PropertyFormProps = {
+interface PropertyFormProps {
   action: (
     formData: FormData,
-  ) => Promise<CreatePropertyState | UpdatePropertyState>;
+  ) => Promise<{ success?: boolean; error?: string } | void>;
   values?: PropertyFormValues;
   submitLabel?: string;
   pendingLabel?: string;
-};
+}
 
 export default function PropertyForm({
   action,
@@ -52,10 +49,12 @@ export default function PropertyForm({
       const result = await action(formData);
 
       if (result?.error) {
-        setError(result.error);
+        throw new Error(result.error);
       }
     } catch (error) {
-      setError("Could not save property.");
+      const message =
+        error instanceof Error ? error.message : "Failed to save property.";
+      setError(message);
     } finally {
       setPending(false);
     }

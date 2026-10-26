@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import NavBar from ".//NavBar";
+import NavBar from "./NavBar";
 import UserMenu from "./UserMenu";
 
 export default function Header() {

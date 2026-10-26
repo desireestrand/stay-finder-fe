@@ -20,15 +20,16 @@ export default function PropertyActionBox({
 
   async function handleDelete() {
     if (window.confirm("Are you sure you want to delete this property?")) {
-      const result = await deleteProperty(property.property_id);
+      try {
+        await deleteProperty(property.property_id);
 
-      if (result.error) {
-        alert(result.error);
-        return;
+        router.push("/profile");
+        router.refresh();
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Failed to delete property.";
+        alert(message);
       }
-
-      router.push("/profile");
-      router.refresh();
     }
   }
 

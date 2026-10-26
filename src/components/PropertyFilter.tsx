@@ -1,10 +1,10 @@
-// src/components/PropertyFilter.tsx
 "use client";
 
 import { PropertyListFilter, PropertySortBy, SortOrder } from "@/types/property";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, SetStateAction, Dispatch } from "react";
 import ErrorMessage from "@/components/ErrorMessage";
+import type { SubmitEvent } from "react";
 
 type SearchBarProps = {
   search: string;
@@ -68,7 +68,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
     setSortOrder(filter.sort_order || "desc");
   }, [pathname, filter]);
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSearch = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 

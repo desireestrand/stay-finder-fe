@@ -3,7 +3,7 @@
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Property, PropertyKind } from "@/types/property"; // Importera PropertyKind
+import type { Property, PropertyKind } from "@/types/property";
 import { getPropertyById, updateProperty } from "@/utils/propertyService";
 import PageWrapper from "@/components/PageWrapper";
 import PropertyForm, {
@@ -45,7 +45,11 @@ export default function EditPropertyPage({
           setProperty(data);
         }
       } catch (error) {
-        setError("Failed to load property details.");
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Failed to load property details.";
+        setError(message);
       } finally {
         setLoadingProperty(false);
       }
@@ -59,19 +63,14 @@ export default function EditPropertyPage({
     try {
       const result = await updateProperty(propertyId, formData);
 
-      if (result.error) {
-        setError(result.error);
-        return { error: result.error };
-      }
-
-      if (result.propertyId) {
-        router.push(`/properties/${result.propertyId}`);
+      if (result.property_id) {
+        router.push(`/properties/${result.property_id}`);
       }
 
       return { success: true };
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Could not update property.";
+        error instanceof Error ? error.message : "Failed to update property.";
       setError(message);
       return { error: message };
     }

@@ -32,23 +32,22 @@ export default function AuthForm({ mode }: AuthFormProps) {
     const email = String(formData.get("email")).trim();
     const password = String(formData.get("password"));
 
-    let response: void | string;
+    try {
+      if (mode === "login") {
+        await auth.login(email, password);
+      } else {
+        await auth.signup(email, password);
+      }
 
-    if (mode === "login") {
-      response = await auth.login(email, password);
-    } else {
-      response = await auth.signup(email, password);
+      router.push(redirectTo);
+      router.refresh();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Authentication failed.";
+      setError(message);
+    } finally {
+      setPending(false);
     }
-
-    setPending(false);
-
-    if (typeof response === "string") {
-      setError(response);
-      return;
-    }
-
-    router.push(redirectTo);
-    router.refresh();
   };
 
   const isLogin = mode === "login";

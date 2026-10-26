@@ -22,10 +22,14 @@ import T from "@/components/typography";
 export default function ProfilePage() {
   const { user, isLoading } = useAuth();
 
-  const [activeTab, setActiveTab] = useState<"properties" | "bookings">("properties");
+  const [activeTab, setActiveTab] = useState<"properties" | "bookings">(
+    "properties",
+  );
 
   const [properties, setProperties] = useState<Property[]>([]);
-  const [propertyBookings, setPropertyBookings] = useState<Record<string, Booking[]>>({});
+  const [propertyBookings, setPropertyBookings] = useState<
+    Record<string, Booking[]>
+  >({});
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   const [loadingData, setLoadingData] = useState(true);
@@ -64,7 +68,11 @@ export default function ProfilePage() {
 
         setPropertyBookings(Object.fromEntries(bookingsEntries));
       } catch (error) {
-        setError("Could not load profile data. Please try again later.");
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Failed to load profile data. Please try again later.";
+        setError(message);
       } finally {
         setLoadingData(false);
       }
@@ -81,7 +89,9 @@ export default function ProfilePage() {
 
       setProperties((prev) => prev.filter((p) => p.property_id !== propertyId));
     } catch (error) {
-      setError("Could not delete property.");
+      const message =
+        error instanceof Error ? error.message : "Failed to delete property.";
+      setError(message);
     }
   }
 
@@ -100,7 +110,9 @@ export default function ProfilePage() {
         prev.map((b) => (b.booking_id === bookingId ? updated : b)),
       );
     } catch (error) {
-      setError("Could not cancel booking.");
+      const message =
+        error instanceof Error ? error.message : "Failed to cancel booking.";
+      setError(message);
     }
   }
 
@@ -112,7 +124,9 @@ export default function ProfilePage() {
 
       setBookings((prev) => prev.filter((b) => b.booking_id !== bookingId));
     } catch (error) {
-      setError("Could not delete booking.");
+      const message =
+        error instanceof Error ? error.message : "Failed to delete booking.";
+      setError(message);
     }
   }
 
@@ -137,7 +151,11 @@ export default function ProfilePage() {
         ),
       }));
     } catch (error) {
-      setError("Could not update booking status.");
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to update booking status.";
+      setError(message);
     }
   }
 
