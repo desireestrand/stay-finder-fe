@@ -1,7 +1,7 @@
 // src/components/PropertyFilter.tsx
 "use client";
 
-import { PropertyListFilter } from "@/types/property";
+import { PropertyListFilter, PropertySortBy, SortOrder } from "@/types/property";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, SetStateAction, Dispatch } from "react";
 import ErrorMessage from "@/components/ErrorMessage";
@@ -53,8 +53,8 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
   const [startDate, setStartDate] = useState(filter.start_date || "");
   const [endDate, setEndDate] = useState(filter.end_date || "");
 
-  const [sortBy, setSortBy] = useState(filter.sort_by || "created_at");
-  const [sortOrder, setSortOrder] = useState(filter.sort_order || "desc");
+  const [sortBy, setSortBy] = useState<PropertySortBy>(filter.sort_by || "created_at");
+  const [sortOrder, setSortOrder] = useState<SortOrder>(filter.sort_order || "desc");
 
   useEffect(() => {
     setQ(filter.q || "");
@@ -223,7 +223,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
 
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as PropertySortBy)}
               className="h-10 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-zinc-300"
             >
               <option value="created_at">Newest</option>
@@ -240,7 +240,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
             
             <select
               value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value as any)}
+              onChange={(e) => setSortOrder(e.target.value as SortOrder)}
               className="h-10 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-zinc-300"
             >
               <option value="desc">Descending</option>

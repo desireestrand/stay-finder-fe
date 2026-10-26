@@ -2,6 +2,8 @@ import type {
   Property,
   PropertyKind,
   PropertyListFilter,
+  PropertySortBy,
+  SortOrder,
 } from "@/types/property";
 import { getProperties, getPropertiesByKind } from "@/utils/propertyService";
 import PropertyCard from "./PropertyCard";
@@ -28,8 +30,8 @@ export default async function PropertyList({
     max_guests: params.max_guests ? Number(params.max_guests) : undefined,
     start_date: params.start_date?.toString() || undefined,
     end_date: params.end_date?.toString() || undefined,
-    sort_by: (params.sort_by as any) || "created_at",
-    sort_order: (params.sort_order as any) || "desc",
+    sort_by: (params.sort_by as PropertySortBy) || "created_at",
+    sort_order: (params.sort_order as SortOrder) || "desc",
     limit: 10,
     offset: params.offset ? Number(params.offset) : 0,
   };
@@ -42,8 +44,9 @@ export default async function PropertyList({
       ? await getPropertiesByKind(kind, filters)
       : await getProperties(filters);
     properties = result.data;
-  } catch (error: any) {
-    errorMessage = error.message || "Failed to fetch properties";
+  } catch (error) {
+    errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch properties";
   }
 
   const titleText = kind
