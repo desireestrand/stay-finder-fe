@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthUser } from "@/types/auth";
 import {
   getMe,
   login as apiLogin,

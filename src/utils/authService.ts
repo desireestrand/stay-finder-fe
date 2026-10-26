@@ -1,3 +1,4 @@
+import { AuthUser } from "@/types/auth";
 import { parseErrorResponse } from "./error";
 
 export async function login(
