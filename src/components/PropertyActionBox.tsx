@@ -90,7 +90,7 @@ export default function PropertyActionBox({
               href={`/properties/${property.property_id}/edit`}
               className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition"
             >
-              Edit Property
+              Edit property
             </Link>
 
             <button
@@ -98,14 +98,14 @@ export default function PropertyActionBox({
               onClick={() => setIsDeleteModalOpen(true)}
               className="w-full rounded-xl bg-red-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-700 transition"
             >
-              Delete Property
+              Delete property
             </button>
           </div>
         </div>
 
         <ConfirmModal
           isOpen={isDeleteModalOpen}
-          title="Delete Property"
+          title="Delete property"
           description={`Are you sure you want to delete "${property.title}"? All associated bookings will also be deleted. This action cannot be undone.`}
           confirmText={isDeleting ? "Deleting..." : "Delete"}
           cancelText="Cancel"
