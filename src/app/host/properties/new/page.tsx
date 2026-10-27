@@ -20,7 +20,7 @@ export default function NewPropertyPage() {
       return { success: true };
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to create property.";
+        error instanceof Error ? error.message : "Failed to create property";
       return { error: message };
     }
   }

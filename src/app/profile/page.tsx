@@ -90,7 +90,7 @@ export default function ProfilePage() {
       setProperties((prev) => prev.filter((p) => p.property_id !== propertyId));
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to delete property.";
+        error instanceof Error ? error.message : "Failed to delete property";
       setError(message);
     }
   }
@@ -111,7 +111,7 @@ export default function ProfilePage() {
       );
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to cancel booking.";
+        error instanceof Error ? error.message : "Failed to cancel booking";
       setError(message);
     }
   }
@@ -125,7 +125,7 @@ export default function ProfilePage() {
       setBookings((prev) => prev.filter((b) => b.booking_id !== bookingId));
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to delete booking.";
+        error instanceof Error ? error.message : "Failed to delete booking";
       setError(message);
     }
   }
@@ -154,7 +154,7 @@ export default function ProfilePage() {
       const message =
         error instanceof Error
           ? error.message
-          : "Failed to update booking status.";
+          : "Failed to update booking status";
       setError(message);
     }
   }

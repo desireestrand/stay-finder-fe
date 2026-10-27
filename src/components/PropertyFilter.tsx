@@ -81,12 +81,12 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
     setError(null);
 
     if ((startDate && !endDate) || (!startDate && endDate)) {
-      setError("Both start date and end date must be provided together.");
+      setError("Both start date and end date must be provided together");
       return;
     }
 
     if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
-      setError("End date must be after start date.");
+      setError("End date must be after start date");
       return;
     }
 

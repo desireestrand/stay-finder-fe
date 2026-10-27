@@ -16,7 +16,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
         <T.Header size="lg">Something went wrong</T.Header>
 
         <div className="w-full">
-          <ErrorMessage message={error.message || "An unexpected error occurred."} />
+          <ErrorMessage message={error.message || "An unexpected error occurred"} />
         </div>
 
         <button

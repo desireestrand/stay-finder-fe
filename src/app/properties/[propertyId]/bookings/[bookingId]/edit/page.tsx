@@ -34,7 +34,7 @@ export default function EditBookingPage({
         const message =
           error instanceof Error
             ? error.message
-            : "Failed to load booking details.";
+            : "Failed to load booking details";
         setLoadError(message);
       } finally {
         setLoadingData(false);
@@ -50,7 +50,7 @@ export default function EditBookingPage({
       return { success: true };
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to update booking.";
+        error instanceof Error ? error.message : "Failed to update booking";
       return { error: message };
     }
   }

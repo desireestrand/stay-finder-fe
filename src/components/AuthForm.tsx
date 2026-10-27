@@ -43,7 +43,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
       router.refresh();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Authentication failed.";
+        error instanceof Error ? error.message : "Authentication failed";
       setError(message);
     } finally {
       setPending(false);

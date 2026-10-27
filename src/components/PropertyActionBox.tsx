@@ -27,7 +27,7 @@ export default function PropertyActionBox({
         router.refresh();
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Failed to delete property.";
+          error instanceof Error ? error.message : "Failed to delete property";
         alert(message);
       }
     }

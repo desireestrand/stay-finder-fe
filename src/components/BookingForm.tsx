@@ -63,23 +63,23 @@ export default function BookingForm({
     setError(null);
 
     if (!checkIn || !checkOut) {
-      setError("Please select check-in and check-out dates.");
+      setError("Please select check-in and check-out dates");
       return;
     }
 
     if (new Date(checkOut) <= new Date(checkIn)) {
-      setError("Check-out date must be after check-in date.");
+      setError("Check-out date must be after check-in date");
       return;
     }
 
     if (guests < 1) {
-      setError("Number of guests must be at least 1.");
+      setError("Number of guests must be at least 1");
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(guestEmail)) {
-      setError("Please enter a valid email address.");
+      setError("Please enter a valid email address");
       return;
     }
 
@@ -113,7 +113,7 @@ export default function BookingForm({
       onBookingComplete?.();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to process booking.";
+        error instanceof Error ? error.message : "Failed to process booking";
       setError(message);
     } finally {
       setPending(false);

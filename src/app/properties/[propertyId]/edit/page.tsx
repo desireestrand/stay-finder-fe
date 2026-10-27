@@ -33,7 +33,7 @@ export default function EditPropertyPage({
         const data = await getPropertyById(propertyId);
 
         if (!data) {
-          setLoadError("Property not found.");
+          setLoadError("Property not found");
         } else if (data.user_id !== user?.id) {
           router.push("/");
           return;
@@ -44,7 +44,7 @@ export default function EditPropertyPage({
         const message =
           error instanceof Error
             ? error.message
-            : "Failed to load property details.";
+            : "Failed to load property details";
         setLoadError(message);
       } finally {
         setLoadingProperty(false);
@@ -64,7 +64,7 @@ export default function EditPropertyPage({
       return { success: true };
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to update property.";
+        error instanceof Error ? error.message : "Failed to update property";
       return { error: message };
     }
   }

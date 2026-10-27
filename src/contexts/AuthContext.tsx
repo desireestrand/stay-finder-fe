@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       await fetchUser();
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Failed to log in.";
+      const message = error instanceof Error ? error.message : "Failed to log in";
       setError(message);
       throw error;
     }
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       await fetchUser();
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Failed to sign up.";
+      const message = error instanceof Error ? error.message : "Failed to sign up";
       setError(message);
       throw error;
     }
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
       await apiLogout();
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Failed to log out.";
+      const message = error instanceof Error ? error.message : "Failed to log out";
       setError(message);
     } finally {
       setUser(null);

@@ -149,7 +149,7 @@ export async function createProperty(formData: FormData): Promise<Property> {
 
   if (!response.ok) {
     if (response.status === 401) {
-      throw new Error("You need to be signed in to list a stay.");
+      throw new Error("You need to be signed in to list a stay");
     }
 
     const message = await parseErrorResponse(
@@ -198,7 +198,7 @@ export async function updateProperty(
 
   if (!response.ok) {
     if (response.status === 401) {
-      throw new Error("You need to be signed in to update a stay.");
+      throw new Error("You need to be signed in to update a stay");
     }
 
     const message = await parseErrorResponse(
@@ -222,12 +222,12 @@ export async function deleteProperty(propertyId: string): Promise<void> {
 
   if (!response.ok) {
     if (response.status === 401) {
-      throw new Error("You need to be signed in to delete a stay.");
+      throw new Error("You need to be signed in to delete a stay");
     }
 
     const message = await parseErrorResponse(
       response,
-      "Failed to delete stay.",
+      "Failed to delete stay",
     );
     throw new Error(message);
   }

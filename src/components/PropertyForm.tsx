@@ -53,7 +53,7 @@ export default function PropertyForm({
       }
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to save property.";
+        error instanceof Error ? error.message : "Failed to save property";
       setError(message);
     } finally {
       setPending(false);
