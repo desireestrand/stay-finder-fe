@@ -20,7 +20,7 @@ export type PropertyFormValues = {
 };
 
 interface PropertyFormProps {
-  action: (
+  onSubmit: (
     formData: FormData,
   ) => Promise<{ success?: boolean; error?: string } | void>;
   values?: PropertyFormValues;
@@ -29,7 +29,7 @@ interface PropertyFormProps {
 }
 
 export default function PropertyForm({
-  action,
+  onSubmit,
   values,
   submitLabel = "Create stay",
   pendingLabel = "Creating…",
@@ -37,7 +37,7 @@ export default function PropertyForm({
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
-  async function onSubmit(e: SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -46,7 +46,7 @@ export default function PropertyForm({
     setPending(true);
 
     try {
-      const result = await action(formData);
+      const result = await onSubmit(formData);
 
       if (result?.error) {
         throw new Error(result.error);
@@ -63,7 +63,7 @@ export default function PropertyForm({
   return (
     <form
       noValidate
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
       className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
     >
       <div className="flex flex-col gap-4">

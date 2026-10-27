@@ -43,7 +43,7 @@ export default function EditBookingPage({
     fetchBooking();
   }, [user, bookingId]);
 
-  async function onUpdate(bookingData: Partial<NewBooking>) {
+  async function handleUpdate(bookingData: Partial<NewBooking>) {
     try {
       await updateGuestBooking(propertyId, bookingId, bookingData);
       router.push("/profile");
@@ -67,7 +67,7 @@ export default function EditBookingPage({
         ) : !booking ? (
           <p className="text-sm text-red-500">Booking not found.</p>
         ) : (
-          <BookingForm initialData={booking} action={onUpdate} />
+          <BookingForm initialData={booking} onSubmit={handleUpdate} />
         )}
       </main>
     </PageWrapper>

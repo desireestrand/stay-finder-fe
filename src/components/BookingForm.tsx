@@ -13,7 +13,7 @@ interface BookingFormProps {
   initialData?: Booking;
   dates?: BookingDates;
   onBookingComplete?: () => void;
-  action?: (
+  onSubmit?: (
     data: Partial<NewBooking>,
   ) => Promise<{ error?: string; success?: boolean }>;
 }
@@ -25,7 +25,7 @@ export default function BookingForm({
   initialData,
   dates,
   onBookingComplete,
-  action,
+  onSubmit,
 }: BookingFormProps) {
   const [guestName, setGuestName] = useState(initialData?.guest_name || "");
   const [guestEmail, setGuestEmail] = useState(initialData?.guest_email || "");
@@ -86,8 +86,8 @@ export default function BookingForm({
     setPending(true);
 
     try {
-      if (action) {
-        const result = await action({
+      if (onSubmit) {
+        const result = await onSubmit({
           guest_name: guestName,
           guest_email: guestEmail,
           check_in: checkIn,

@@ -53,7 +53,7 @@ export default function EditPropertyPage({
     fetchProperty();
   }, [propertyId, user, router]);
 
-  async function onUpdate(formData: FormData) {
+  async function handleUpdate(formData: FormData) {
     try {
       const result = await updateProperty(propertyId, formData);
 
@@ -91,7 +91,7 @@ export default function EditPropertyPage({
           <p className="text-sm text-red-500">Property not found.</p>
         ) : (
           <PropertyForm
-            action={onUpdate}
+            onSubmit={handleUpdate}
             values={formValues}
             submitLabel="Save changes"
             pendingLabel="Saving..."
