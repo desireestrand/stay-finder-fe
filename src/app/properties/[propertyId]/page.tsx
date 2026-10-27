@@ -49,7 +49,7 @@ export default async function PropertyPage({
                 alt={property.title}
                 fill
                 sizes="(max-width: 1024px) 100vw, 66vw"
-                loading="eager"
+                unoptimized
                 priority
                 className="object-cover"
               />

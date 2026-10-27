@@ -38,7 +38,7 @@ export default function UserPropertyCard({
               alt={property.title}
               fill
               sizes="(max-width: 1024px) 96px, 80px"
-              loading="eager"
+              unoptimized
               className="object-cover"
             />
           </div>
