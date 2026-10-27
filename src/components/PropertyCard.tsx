@@ -2,6 +2,7 @@ import type { Property } from "@/types/property";
 import { cn } from "@/utils/cn";
 import Link from "next/link";
 import T from "./typography";
+import Image from "next/image";
 
 interface PropertyCardProps {
   property: Property;
@@ -26,10 +27,13 @@ export default function PropertyCard({
     >
       <article className="flex flex-col h-full">
         <div className="relative h-64 w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-          <img
+          <Image
             src={imageUrl}
             alt={property.title}
-            className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            loading="eager"
+            className="object-cover object-center transition duration-500 group-hover:scale-105"
           />
 
           {property.kind && (

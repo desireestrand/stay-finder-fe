@@ -4,6 +4,7 @@ import PageWrapper from "@/components/PageWrapper";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import T from "@/components/typography";
+import Image from "next/image";
 
 export default async function PropertyPage({
   params,
@@ -43,10 +44,14 @@ export default async function PropertyPage({
         <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8 items-start">
           <div className="flex flex-col gap-6 lg:col-span-2 w-full">
             <div className="relative h-100 w-full overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800 shadow-sm">
-              <img
+              <Image
                 src={imageUrl}
                 alt={property.title}
-                className="h-full w-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 66vw"
+                loading="eager"
+                priority
+                className="object-cover"
               />
             </div>
 

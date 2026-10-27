@@ -3,6 +3,7 @@ import type { Booking, BookingStatus } from "@/types/booking";
 import UserIncomingBookingsList from "./UserIncomingBookingsList";
 import Link from "next/link";
 import T from "./typography";
+import Image from "next/image";
 
 interface UserPropertyCardProps {
   property: Property;
@@ -32,10 +33,13 @@ export default function UserPropertyCard({
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex gap-4 items-center flex-1 min-w-0">
           <div className="h-20 w-20 overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 shrink-0">
-            <img
+            <Image
               src={imageUrl}
               alt={property.title}
-              className="h-full w-full object-cover"
+              fill
+              sizes="80px"
+              loading="eager"
+              className="object-cover"
             />
           </div>
 
