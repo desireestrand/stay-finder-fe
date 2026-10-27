@@ -38,6 +38,8 @@ export default function BookingForm({
     initialData?.check_out || dates?.check_out || "",
   );
 
+  const today = new Date().toISOString().split("T")[0];
+
   const calculateNights = (checkInStr: string, checkOutStr: string) => {
     if (!checkInStr || !checkOutStr) return 0;
 
@@ -100,7 +102,6 @@ export default function BookingForm({
         }
       } else if (propertyId) {
         await createBooking(propertyId, {
-          property_id: propertyId,
           guest_name: guestName,
           guest_email: guestEmail,
           check_in: checkIn,
@@ -124,7 +125,7 @@ export default function BookingForm({
     <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1 text-sm">
         <label className="font-medium text-zinc-700 dark:text-zinc-300">
-          Guest Name
+          Guest name
         </label>
 
         <input
@@ -138,7 +139,7 @@ export default function BookingForm({
 
       <div className="flex flex-col gap-1 text-sm">
         <label className="font-medium text-zinc-700 dark:text-zinc-300">
-          Guest Email
+          Guest email
         </label>
 
         <input
@@ -159,6 +160,7 @@ export default function BookingForm({
           <input
             type="date"
             required
+            min={today}
             value={checkIn}
             onChange={(e) => setCheckIn(e.target.value)}
             className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
@@ -173,6 +175,7 @@ export default function BookingForm({
           <input
             type="date"
             required
+            min={checkIn || today}
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
             className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
@@ -182,7 +185,7 @@ export default function BookingForm({
 
       <div className="flex flex-col gap-1 text-sm">
         <label className="font-medium text-zinc-700 dark:text-zinc-300">
-          Number of Guests
+          Number of guests
         </label>
 
         <input
