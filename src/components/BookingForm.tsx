@@ -106,8 +106,7 @@ export default function BookingForm({
           guest_email: guestEmail,
           check_in: checkIn,
           check_out: checkOut,
-          guests,
-          status: "pending",
+          guests
         });
       }
 
