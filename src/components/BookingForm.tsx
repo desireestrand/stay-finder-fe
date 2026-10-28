@@ -123,7 +123,7 @@ export default function BookingForm({
   return (
     <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1 text-sm">
-        <label className="font-medium text-zinc-700 dark:text-zinc-300">
+        <label className="font-medium text-zinc-700">
           Guest name
         </label>
 
@@ -132,12 +132,12 @@ export default function BookingForm({
           required
           value={guestName}
           onChange={(e) => setGuestName(e.target.value)}
-          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
+          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
         />
       </div>
 
       <div className="flex flex-col gap-1 text-sm">
-        <label className="font-medium text-zinc-700 dark:text-zinc-300">
+        <label className="font-medium text-zinc-700">
           Guest email
         </label>
 
@@ -146,13 +146,13 @@ export default function BookingForm({
           required
           value={guestEmail}
           onChange={(e) => setGuestEmail(e.target.value)}
-          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
+          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
         />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1 text-sm">
-          <label className="font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="font-medium text-zinc-700">
             Check-in
           </label>
 
@@ -162,12 +162,12 @@ export default function BookingForm({
             min={today}
             value={checkIn}
             onChange={(e) => setCheckIn(e.target.value)}
-            className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
+            className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
           />
         </div>
 
         <div className="flex flex-col gap-1 text-sm">
-          <label className="font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="font-medium text-zinc-700">
             Check-out
           </label>
 
@@ -177,13 +177,13 @@ export default function BookingForm({
             min={checkIn || today}
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
-            className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
+            className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-1 text-sm">
-        <label className="font-medium text-zinc-700 dark:text-zinc-300">
+        <label className="font-medium text-zinc-700">
           Number of guests
         </label>
 
@@ -193,19 +193,19 @@ export default function BookingForm({
           required
           value={guests}
           onChange={(e) => setGuests(Number(e.target.value))}
-          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
+          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
         />
       </div>
 
       {nights > 0 && pricePerNight && (
-        <div className="rounded-lg bg-zinc-100 p-4 dark:bg-zinc-900 text-sm space-y-2 border border-zinc-200 dark:border-zinc-800">
-          <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
+        <div className="rounded-lg bg-zinc-100 p-4 text-sm space-y-2 border border-zinc-200">
+          <div className="flex justify-between text-zinc-600">
             <span>
               {pricePerNight} SEK × {nights} {nights === 1 ? "night" : "nights"}
             </span>
             <span>{nights * pricePerNight} SEK</span>
           </div>
-          <div className="border-t border-zinc-200 dark:border-zinc-800 pt-2 flex justify-between font-semibold text-zinc-900 dark:text-zinc-100">
+          <div className="border-t border-zinc-200 pt-2 flex justify-between font-semibold text-zinc-900">
             <span>Total price</span>
             <span>{totalPrice} SEK</span>
           </div>
@@ -217,7 +217,7 @@ export default function BookingForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+        className="rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-50"
       >
         {pending ? "Saving..." : bookingId ? "Save Changes" : "Confirm Booking"}
       </button>

@@ -21,12 +21,12 @@ export default function PropertyCard({
     <Link
       href={`/properties/${property.property_id}`}
       className={cn(
-        "group block overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition duration-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900",
+        "group block overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition duration-300 hover:shadow-md",
         className,
       )}
     >
       <article className="flex flex-col h-full">
-        <div className="relative h-64 w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+        <div className="relative h-64 w-full overflow-hidden bg-zinc-100">
           <Image
             src={imageUrl}
             alt={property.title}
@@ -37,7 +37,7 @@ export default function PropertyCard({
           />
 
           {property.kind && (
-            <span className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-xs font-semibold text-zinc-900 shadow-sm uppercase tracking-wider dark:bg-zinc-950/80 dark:text-zinc-100">
+            <span className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-xs font-semibold text-zinc-900 shadow-sm uppercase tracking-wider">
               {property.kind}
             </span>
           )}
@@ -47,29 +47,29 @@ export default function PropertyCard({
           <div>
             <T.Header
               size="sm"
-              className="line-clamp-1 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors"
+              className="line-clamp-1 group-hover:text-zinc-600 transition-colors"
             >
               {property.title}
             </T.Header>
 
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="mt-1 text-sm text-zinc-500">
               {property.city}, {property.country} · Max {property.max_guests}{" "}
               guests
             </p>
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-zinc-100 dark:border-zinc-800">
+          <div className="flex items-center justify-between pt-3 border-t border-zinc-100">
             <div>
-              <span className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <span className="text-base font-bold text-zinc-900">
                 {property.price_per_night} SEK
               </span>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              <span className="text-xs text-zinc-500">
                 {" "}
                 / night
               </span>
             </div>
 
-            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+            <span className="text-sm font-medium text-zinc-900 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
               View property →
             </span>
           </div>

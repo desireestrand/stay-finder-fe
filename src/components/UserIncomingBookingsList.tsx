@@ -41,13 +41,13 @@ export default function UserIncomingBookingsList({
 
   return (
     <>
-      <div className="border-t border-zinc-100 dark:border-zinc-800 pt-4 mt-2">
-        <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3 dark:text-zinc-400">
+      <div className="border-t border-zinc-100 pt-4 mt-2">
+        <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">
           Incoming Reservations ({bookings.length})
         </h4>
 
         {bookings.length === 0 ? (
-          <p className="text-xs text-zinc-400 dark:text-zinc-500 italic">
+          <p className="text-xs text-zinc-400 italic">
             No reservations for this property yet.
           </p>
         ) : (
@@ -58,24 +58,24 @@ export default function UserIncomingBookingsList({
               return (
                 <div
                   key={booking.booking_id}
-                  className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-zinc-50 dark:bg-zinc-800/40 p-3.5 rounded-xl text-xs border border-zinc-100 dark:border-zinc-800"
+                  className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-zinc-50 p-3.5 rounded-xl text-xs border border-zinc-100"
                 >
                   <div>
-                    <p className="font-semibold text-zinc-900 dark:text-zinc-100">
+                    <p className="font-semibold text-zinc-900">
                       {booking.guest_name}{" "}
-                      <span className="font-normal text-zinc-500 dark:text-zinc-400">
+                      <span className="font-normal text-zinc-500">
                         ({booking.guest_email})
                       </span>
                     </p>
 
-                    <p className="text-zinc-500 dark:text-zinc-400 mt-0.5">
+                    <p className="text-zinc-500 mt-0.5">
                       {booking.check_in} → {booking.check_out} ({booking.guests}{" "}
                       {booking.guests === 1 ? "guest" : "guests"}) •{" "}
-                      <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+                      <span className="font-semibold text-zinc-900">
                         {booking.total_price} SEK
                       </span>{" "}
                       • Status:{" "}
-                      <span className="font-semibold capitalize text-zinc-700 dark:text-zinc-300">
+                      <span className="font-semibold capitalize text-zinc-700">
                         {booking.status}
                       </span>
                     </p>
@@ -107,7 +107,7 @@ export default function UserIncomingBookingsList({
                             action: "cancel",
                           })
                         }
-                        className="rounded-lg bg-zinc-200 dark:bg-zinc-700 px-3 py-1.5 text-zinc-800 dark:text-zinc-200 font-medium hover:bg-zinc-300 dark:hover:bg-zinc-600 transition"
+                        className="rounded-lg bg-zinc-200 px-3 py-1.5 text-zinc-800 font-medium hover:bg-zinc-300 transition"
                       >
                         Cancel
                       </button>
@@ -122,7 +122,7 @@ export default function UserIncomingBookingsList({
                             action: "delete",
                           })
                         }
-                        className="rounded-lg bg-red-50 dark:bg-red-950/50 px-3 py-1.5 text-red-600 dark:text-red-400 font-medium hover:bg-red-100 dark:hover:bg-red-900/50 transition"
+                        className="rounded-lg bg-red-50 px-3 py-1.5 text-red-600 font-medium hover:bg-red-100 transition"
                       >
                         Delete
                       </button>

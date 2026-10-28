@@ -27,7 +27,7 @@ export default async function PropertyPage({
         <div>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 transition-colors"
           >
             ← Back to all stays
           </Link>
@@ -36,14 +36,14 @@ export default async function PropertyPage({
         <div className="flex flex-col gap-1.5">
           <T.Header size="lg">{property.title}</T.Header>
 
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-zinc-600">
             {property.city}, {property.country}{" "}
           </p>
         </div>
 
         <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8 items-start">
           <div className="flex flex-col gap-6 lg:col-span-2 w-full">
-            <div className="relative h-100 w-full overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800 shadow-sm">
+            <div className="relative h-100 w-full overflow-hidden rounded-2xl bg-zinc-100 shadow-sm">
               <Image
                 src={imageUrl}
                 alt={property.title}
@@ -57,37 +57,37 @@ export default async function PropertyPage({
 
             <div>
               <p>
-                <span className="text-lg text-zinc-900 dark:text-zinc-100 font-semibold">
+                <span className="text-lg text-zinc-900 font-semibold">
                   {property.price_per_night} SEK
                 </span>
 
-                <span className="text-lg text-zinc-500 dark:text-zinc-400">
+                <span className="text-lg text-zinc-500">
                   {" "}
                   / night
                 </span>
               </p>
             </div>
 
-            <div className="border-t border-zinc-100 pt-6 dark:border-zinc-800">
-              <h3 className="py-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+            <div className="border-t border-zinc-100 pt-6">
+              <h3 className="py-1 text-lg font-semibold text-zinc-900">
                 About the property
               </h3>
 
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+              <p className="text-sm text-zinc-500">
                 {property.kind && `${property.kind.toLocaleUpperCase()} `}
-                <span className="text-zinc-400 dark:text-zinc-600">
+                <span className="text-zinc-400">
                   ·
                 </span> Max {property.max_guests} guests
               </p>
 
-              <p className="py-3 leading-relaxed text-zinc-700 dark:text-zinc-300 whitespace-pre-line">
+              <p className="py-3 leading-relaxed text-zinc-700 whitespace-pre-line">
                 {property.description}
               </p>
             </div>
 
             {property.user_id && (
-              <div className="text-sm text-zinc-500 dark:text-zinc-400">
-                <span className="font-medium text-zinc-900 dark:text-zinc-100">
+              <div className="text-sm text-zinc-500">
+                <span className="font-medium text-zinc-900">
                   Owner:
                 </span>{" "}
                 {property.user_id}

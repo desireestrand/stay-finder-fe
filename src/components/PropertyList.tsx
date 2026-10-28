@@ -64,12 +64,12 @@ export default async function PropertyList({
       <ErrorMessage message={errorMessage} />
 
       {!errorMessage && properties.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-zinc-300 py-16 text-center dark:border-zinc-800">
-          <p className="text-lg font-medium text-zinc-900 dark:text-zinc-100">
+        <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-zinc-300 py-16 text-center">
+          <p className="text-lg font-medium text-zinc-900">
             No properties found...
           </p>
 
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="text-sm text-zinc-500">
             Try changing or clearing your filters to see more results.
           </p>
         </div>

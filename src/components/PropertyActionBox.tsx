@@ -46,10 +46,10 @@ export default function PropertyActionBox({
     const signupUrl = `/auth/signup?redirectTo=${currentPath}`;
 
     return (
-      <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm">
         <div>
           <T.Header size="sm">Log in to book your stay</T.Header>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+          <p className="text-xs text-zinc-500 mt-1">
             You need to be logged in to make a reservation for this property.
           </p>
         </div>
@@ -57,14 +57,14 @@ export default function PropertyActionBox({
         <div className="flex flex-col gap-2.5">
           <Link
             href={loginUrl}
-            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition"
+            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 transition"
           >
             Log in
           </Link>
 
           <Link
             href={signupUrl}
-            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition"
+            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 transition"
           >
             Sign up
           </Link>
@@ -76,10 +76,10 @@ export default function PropertyActionBox({
   if (isOwner) {
     return (
       <>
-        <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm">
           <div>
             <T.Header size="sm">Manage your property</T.Header>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-zinc-500 mt-1">
               You are the owner of this stay. You can edit details or remove it
               entirely.
             </p>
@@ -88,7 +88,7 @@ export default function PropertyActionBox({
           <div className="flex flex-col gap-2.5">
             <Link
               href={`/properties/${property.property_id}/edit`}
-              className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition"
+              className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 transition"
             >
               Edit property
             </Link>

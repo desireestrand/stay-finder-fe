@@ -27,12 +27,12 @@ export default function ConfirmModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
-        <T.Header size="sm" className="text-zinc-900 dark:text-zinc-100">
+      <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-lg">
+        <T.Header size="sm" className="text-zinc-900">
           {title}
         </T.Header>
 
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="mt-2 text-sm text-zinc-600">
           {description}
         </p>
 
@@ -41,7 +41,7 @@ export default function ConfirmModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 transition"
+              className="rounded-lg bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-200 transition"
             >
               {cancelText}
             </button>
@@ -56,7 +56,7 @@ export default function ConfirmModal({
             className={`rounded-lg px-4 py-2 text-xs font-medium text-white transition ${
               variant === "danger"
                 ? "bg-red-600 hover:bg-red-700"
-                : "bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                : "bg-zinc-900 hover:bg-zinc-800"
             }`}
           >
             {confirmText}

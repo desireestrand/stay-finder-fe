@@ -24,18 +24,18 @@ export default function UserPropertiesTab({
 }: UserPropertiesTabProps) {
   if (properties.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-zinc-300 py-12 text-center dark:border-zinc-800">
-        <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+      <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-zinc-300 py-12 text-center">
+        <p className="text-sm font-medium text-zinc-900">
           You haven't listed any properties yet.
         </p>
 
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+        <p className="text-xs text-zinc-500">
           List your first stay to start receiving bookings.
         </p>
         
         <Link
           href="/host/properties/new"
-          className="mt-2 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-medium text-white shadow-sm hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition"
+          className="mt-2 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-medium text-white shadow-sm hover:bg-zinc-800 transition"
         >
           + List a stay
         </Link>

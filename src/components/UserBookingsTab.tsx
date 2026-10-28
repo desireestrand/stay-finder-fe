@@ -14,12 +14,12 @@ export default function UserBookingsTab({
 }: UserBookingsListProps) {
   if (bookings.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-zinc-300 py-12 text-center dark:border-zinc-800">
-        <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+      <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-zinc-300 py-12 text-center">
+        <p className="text-sm font-medium text-zinc-900">
           You have no bookings yet.
         </p>
         
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+        <p className="text-xs text-zinc-500">
           When you book a stay, it will appear here.
         </p>
       </div>

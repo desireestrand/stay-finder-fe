@@ -6,7 +6,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 import type { PropertyKind } from "@/types/property";
 
 const fieldClassName =
-  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black focus:ring-1 focus:ring-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-zinc-300 dark:focus:ring-zinc-300";
+  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black focus:ring-1 focus:ring-black";
 
 export type PropertyFormValues = {
   title?: string;
@@ -64,10 +64,10 @@ export default function PropertyForm({
     <form
       noValidate
       onSubmit={handleSubmit}
-      className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+      className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
     >
       <div className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+        <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
           Title
           <input
             name="title"
@@ -78,7 +78,7 @@ export default function PropertyForm({
           />
         </label>
 
-        <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+        <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
           Description
           <textarea
             name="description"
@@ -91,7 +91,7 @@ export default function PropertyForm({
         </label>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             City
             <input
               name="city"
@@ -102,7 +102,7 @@ export default function PropertyForm({
             />
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Country
             <input
               name="country"
@@ -115,7 +115,7 @@ export default function PropertyForm({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Kind
             <select
               name="kind"
@@ -132,7 +132,7 @@ export default function PropertyForm({
             </select>
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Image URL
             <input
               name="image_url"
@@ -145,7 +145,7 @@ export default function PropertyForm({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Max guests
             <input
               name="max_guests"
@@ -158,7 +158,7 @@ export default function PropertyForm({
             />
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Price per night (SEK)
             <input
               name="price_per_night"
@@ -178,7 +178,7 @@ export default function PropertyForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full md:w-auto rounded-lg bg-zinc-900 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+        className="w-full md:w-auto rounded-lg bg-zinc-900 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-60"
       >
         {pending ? pendingLabel : submitLabel}
       </button>

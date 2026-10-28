@@ -54,7 +54,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   return (
     <div className="flex flex-1 items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-black">
+      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
         <form noValidate onSubmit={handleSubmit} className="space-y-6">
           <div className="text-center">
             <T.Header size="lg">
@@ -64,7 +64,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+              <label className="block text-sm font-medium text-gray-700">
                 E-mail
               </label>
 
@@ -73,12 +73,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 type="email"
                 placeholder="name@example.com"
                 required
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black sm:text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black sm:text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+              <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
 
@@ -87,7 +87,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 type="password"
                 placeholder="Minimum 6 characters"
                 required
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black sm:text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black sm:text-sm"
               />
             </div>
           </div>
@@ -97,19 +97,19 @@ export default function AuthForm({ mode }: AuthFormProps) {
           <button
             type="submit"
             disabled={pending}
-            className="w-full rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 transition-colors dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+            className="w-full rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 transition-colors"
           >
             {pending ? "Loading..." : isLogin ? "Log in" : "Sign up"}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-600 dark:text-zinc-400">
+        <div className="mt-6 text-center text-sm text-gray-600">
           {isLogin ? (
             <p>
               Don't have an account?{" "}
               <Link
                 href="/auth/signup"
-                className="font-medium text-black underline hover:text-gray-700 dark:text-zinc-100 dark:hover:text-zinc-300"
+                className="font-medium text-black underline hover:text-gray-700"
               >
                 Sign up
               </Link>
@@ -119,7 +119,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
               Already have an account?{" "}
               <Link
                 href="/auth/login"
-                className="font-medium text-black underline hover:text-gray-700 dark:text-zinc-100 dark:hover:text-zinc-300"
+                className="font-medium text-black underline hover:text-gray-700"
               >
                 Log in
               </Link>
