@@ -69,12 +69,19 @@ export default function UserIncomingBookingsList({
                     </p>
 
                     <p className="text-zinc-500 mt-0.5">
-                      {booking.check_in} → {booking.check_out} ({booking.guests}{" "}
-                      {booking.guests === 1 ? "guest" : "guests"}) •{" "}
+                      {booking.check_in} → {booking.check_out}
+                    </p>
+
+                    <p className="text-zinc-500 mt-0.5">
+                      {booking.guests}{" "}
+                      {booking.guests === 1 ? "guest" : "guests"} •{" "}
                       <span className="font-semibold text-zinc-900">
                         {booking.total_price} SEK
                       </span>{" "}
-                      • Status:{" "}
+                    </p>
+
+                    <p className="text-zinc-500 mt-0.5">
+                      Status:{" "}
                       <span className="font-semibold capitalize text-zinc-700">
                         {booking.status}
                       </span>
@@ -92,7 +99,7 @@ export default function UserIncomingBookingsList({
                             "confirmed",
                           )
                         }
-                        className="rounded-lg bg-emerald-600 px-3 py-1.5 text-white font-medium hover:bg-emerald-700 transition"
+                        className="rounded-lg bg-green-600 px-3 py-1.5 text-white font-medium hover:bg-green-700 transition"
                       >
                         Confirm
                       </button>
@@ -139,8 +146,8 @@ export default function UserIncomingBookingsList({
         isOpen={selectedBooking !== null}
         title={
           selectedBooking?.action === "cancel"
-            ? "Cancel Reservation"
-            : "Delete Booking"
+            ? "Cancel reservation"
+            : "Delete booking"
         }
         description={
           selectedBooking?.action === "cancel"
@@ -148,7 +155,7 @@ export default function UserIncomingBookingsList({
             : "Are you sure you want to delete this booking record?"
         }
         confirmText={
-          selectedBooking?.action === "cancel" ? "Confirm Cancel" : "Delete"
+          selectedBooking?.action === "cancel" ? "Confirm cancel" : "Delete"
         }
         cancelText="Cancel"
         variant={selectedBooking?.action === "delete" ? "danger" : "default"}

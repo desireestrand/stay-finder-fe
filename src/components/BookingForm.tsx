@@ -138,7 +138,7 @@ export default function BookingForm({
 
       <div className="flex flex-col gap-1 text-sm">
         <label className="font-medium text-zinc-700">
-          Guest email
+          Guest e-mail
         </label>
 
         <input
@@ -205,6 +205,7 @@ export default function BookingForm({
             </span>
             <span>{nights * pricePerNight} SEK</span>
           </div>
+          
           <div className="border-t border-zinc-200 pt-2 flex justify-between font-semibold text-zinc-900">
             <span>Total price</span>
             <span>{totalPrice} SEK</span>

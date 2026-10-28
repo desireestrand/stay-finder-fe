@@ -15,7 +15,7 @@ export default function PropertyNotFound() {
           href="/"
           className="rounded-lg bg-zinc-900 px-4 py-2.5 text-xs font-medium text-white hover:bg-zinc-800 transition"
         >
-          Back to all properties
+          Back to all stays
         </Link>
       </main>
     </PageWrapper>

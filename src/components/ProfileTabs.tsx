@@ -21,7 +21,7 @@ export default function ProfileTabs({
             : "border-transparent text-zinc-500 hover:text-zinc-700"
         }`}
       >
-        My Properties ({propertiesCount})
+        My properties ({propertiesCount})
       </button>
 
       <button
@@ -32,7 +32,7 @@ export default function ProfileTabs({
             : "border-transparent text-zinc-500 hover:text-zinc-700"
         }`}
       >
-        My Bookings ({bookingsCount})
+        My bookings ({bookingsCount})
       </button>
     </div>
   );

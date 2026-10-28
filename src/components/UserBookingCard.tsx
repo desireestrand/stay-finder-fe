@@ -110,7 +110,7 @@ export default function UserBookingCard({
       <ConfirmModal
         isOpen={modalAction !== null}
         title={
-          modalAction === "cancel" ? "Cancel Reservation" : "Delete Booking"
+          modalAction === "cancel" ? "Cancel reservation" : "Delete booking"
         }
         description={
           modalAction === "cancel"
@@ -121,7 +121,7 @@ export default function UserBookingCard({
           isProcessing
             ? "Processing..."
             : modalAction === "cancel"
-              ? "Confirm Cancel"
+              ? "Confirm cancel"
               : "Delete"
         }
         cancelText="Close"
