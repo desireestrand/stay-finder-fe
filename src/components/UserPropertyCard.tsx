@@ -86,7 +86,7 @@ export default function UserPropertyCard({
             </div>
           </div>
 
-          <div className="flex w-full lg:w-auto gap-2.5 items-center justify-between lg:justify-end pt-3 lg:pt-0 border-t lg:border-t-0 border-zinc-100 shrink-0">
+          <div className="flex w-full lg:w-auto gap-2.5 items-center justify-between lg:justify-end pt-3 lg:pt-0 shrink-0">
             <Link
               href={`/properties/${property.property_id}`}
               className="flex-1 lg:flex-none text-center rounded-lg bg-zinc-100 px-4 py-2.5 lg:py-2 text-xs font-medium text-zinc-800 hover:bg-zinc-200 transition"

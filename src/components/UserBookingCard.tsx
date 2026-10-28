@@ -50,20 +50,23 @@ export default function UserBookingCard({
       <div className="border border-zinc-200 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white">
         <div className="flex flex-col gap-1">
           <T.Header size="sm">
-            Booking at property #{booking.property_id.slice(0, 8)}
+            Booking at property #{booking.property_id.slice(33, 36)}
           </T.Header>
 
           <p className="text-xs text-zinc-500">
-            {booking.check_in} → {booking.check_out} ({booking.guests}{" "}
-            {booking.guests === 1 ? "guest" : "guests"})
+            {booking.check_in} → {booking.check_out}
+          </p>
+
+          <p className="text-xs text-zinc-500">
+            {booking.guests} {booking.guests === 1 ? "guest" : "guests"} • Total
+            price:{" "}
+            <span className="font-semibold text-zinc-900">
+              {booking.total_price} SEK
+            </span>
           </p>
 
           <p className="text-xs font-medium text-zinc-700 mt-0.5">
-            Total price:{" "}
-            <span className="font-semibold text-zinc-900">
-              {booking.total_price} SEK
-            </span>{" "}
-            • Status:{" "}
+            Status:{" "}
             <span className="capitalize font-semibold">{booking.status}</span>
           </p>
         </div>
