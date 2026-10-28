@@ -28,7 +28,7 @@ export default function UserBookingCard({
   );
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("sv-SE");
   const isPastBooking = booking.check_in < today;
 
   async function handleConfirm() {

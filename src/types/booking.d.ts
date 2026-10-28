@@ -2,7 +2,9 @@ import type { Database } from "./database.types.js";
 
 export type BookingStatus = "pending" | "confirmed" | "cancelled";
 
-export type Booking = Database["public"]["Tables"]["bookings"]["Row"];
+export type Booking = Database["public"]["Tables"]["bookings"]["Row"] & {
+  status: BookingStatus;
+};
 
 export type BookingInsert = Database["public"]["Tables"]["bookings"]["Insert"];
 
