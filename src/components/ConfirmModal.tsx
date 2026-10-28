@@ -27,7 +27,7 @@ export default function ConfirmModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-lg">
+      <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6">
         <T.Header size="sm" className="text-zinc-900">
           {title}
         </T.Header>

@@ -47,7 +47,7 @@ export default function UserBookingCard({
 
   return (
     <>
-      <div className="border border-zinc-200 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white shadow-sm">
+      <div className="border border-zinc-200 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white">
         <div className="flex flex-col gap-1">
           <T.Header size="sm">
             Booking at property #{booking.property_id.slice(0, 8)}
@@ -80,7 +80,7 @@ export default function UserBookingCard({
             <>
               <Link
                 href={`/properties/${booking.property_id}/bookings/${booking.booking_id}/edit`}
-                className="rounded-lg bg-zinc-900 px-3 py-2 text-xs font-medium text-white shadow-sm hover:bg-zinc-800 transition"
+                className="rounded-lg bg-zinc-900 px-3 py-2 text-xs font-medium text-white hover:bg-zinc-800 transition"
               >
                 Edit
               </Link>

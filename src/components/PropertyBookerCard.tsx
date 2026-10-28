@@ -17,7 +17,7 @@ export default function PropertyBookerCard({
 
   return (
     <>
-      <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm">
+      <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
         <div>
           <T.Header size="sm">Book your stay</T.Header>
           <p className="text-xs text-zinc-500 mt-1">

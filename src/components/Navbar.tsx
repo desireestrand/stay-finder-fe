@@ -18,7 +18,7 @@ export default function NavBar() {
           </span>
         </button>
 
-        <div className="absolute top-full left-0 w-48 bg-white border border-zinc-200 rounded-2xl shadow-xl py-2 hidden group-hover:flex flex-col z-50">
+        <div className="absolute top-full left-0 w-48 bg-white border border-zinc-200 rounded-2xl py-2 hidden group-hover:flex flex-col z-50">
           <Link
             href="/properties/kind/apartment"
             className="px-4 py-2.5 text-sm text-zinc-700 hover:bg-zinc-100 transition-colors"

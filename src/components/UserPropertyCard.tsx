@@ -51,7 +51,7 @@ export default function UserPropertyCard({
 
   return (
     <>
-      <div className="border border-zinc-200 rounded-2xl p-5 lg:p-6 flex flex-col gap-5 bg-white shadow-sm">
+      <div className="border border-zinc-200 rounded-2xl p-5 lg:p-6 flex flex-col gap-5 bg-white">
         <div className="flex flex-col lg:flex-row gap-5 items-start lg:items-center justify-between">
           <div className="flex gap-4 items-center w-full lg:w-auto min-w-0 flex-1">
             <div className="relative h-20 w-20 sm:h-24 sm:w-24 lg:h-20 lg:w-20 overflow-hidden rounded-xl bg-zinc-100 shrink-0">
@@ -96,7 +96,7 @@ export default function UserPropertyCard({
 
             <Link
               href={`/properties/${property.property_id}/edit`}
-              className="flex-1 lg:flex-none text-center rounded-lg bg-zinc-900 px-4 py-2.5 lg:py-2 text-xs font-medium text-white shadow-sm hover:bg-zinc-800 transition"
+              className="flex-1 lg:flex-none text-center rounded-lg bg-zinc-900 px-4 py-2.5 lg:py-2 text-xs font-medium text-white hover:bg-zinc-800 transition"
             >
               Edit
             </Link>

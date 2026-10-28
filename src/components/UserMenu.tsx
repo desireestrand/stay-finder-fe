@@ -22,7 +22,7 @@ export default function UserMenu() {
       <div className="flex items-center gap-4">
         <Link
           href="/host/properties/new"
-          className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 transition"
+          className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 transition"
         >
           + List a stay
         </Link>
@@ -59,7 +59,7 @@ export default function UserMenu() {
 
       <Link
         href="/auth/signup"
-        className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 transition"
+        className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 transition"
       >
         Create account
       </Link>

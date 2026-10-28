@@ -46,7 +46,7 @@ export default function PropertyActionBox({
     const signupUrl = `/auth/signup?redirectTo=${currentPath}`;
 
     return (
-      <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm">
+      <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
         <div>
           <T.Header size="sm">Log in to book your stay</T.Header>
           <p className="text-xs text-zinc-500 mt-1">
@@ -57,14 +57,14 @@ export default function PropertyActionBox({
         <div className="flex flex-col gap-2.5">
           <Link
             href={loginUrl}
-            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 transition"
+            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 transition"
           >
             Log in
           </Link>
 
           <Link
             href={signupUrl}
-            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 transition"
+            className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 transition"
           >
             Sign up
           </Link>
@@ -76,7 +76,7 @@ export default function PropertyActionBox({
   if (isOwner) {
     return (
       <>
-        <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm">
+        <div className="flex flex-col gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
           <div>
             <T.Header size="sm">Manage your property</T.Header>
             <p className="text-xs text-zinc-500 mt-1">
@@ -88,7 +88,7 @@ export default function PropertyActionBox({
           <div className="flex flex-col gap-2.5">
             <Link
               href={`/properties/${property.property_id}/edit`}
-              className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-zinc-800 transition"
+              className="w-full text-center rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 transition"
             >
               Edit property
             </Link>
@@ -96,7 +96,7 @@ export default function PropertyActionBox({
             <button
               type="button"
               onClick={() => setIsDeleteModalOpen(true)}
-              className="w-full rounded-xl bg-red-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-700 transition"
+              className="w-full rounded-xl bg-red-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-700 transition"
             >
               Delete property
             </button>

@@ -126,7 +126,7 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
     <form
       noValidate
       onSubmit={handleSearch}
-      className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
+      className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6"
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         <div className="flex flex-col gap-1.5">

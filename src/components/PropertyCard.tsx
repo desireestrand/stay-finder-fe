@@ -21,7 +21,7 @@ export default function PropertyCard({
     <Link
       href={`/properties/${property.property_id}`}
       className={cn(
-        "group block overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition duration-300 hover:shadow-md",
+        "group block overflow-hidden rounded-2xl border border-zinc-200 bg-white transition duration-300 hover:shadow-sm",
         className,
       )}
     >
@@ -37,7 +37,7 @@ export default function PropertyCard({
           />
 
           {property.kind && (
-            <span className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-xs font-semibold text-zinc-900 shadow-sm uppercase tracking-wider">
+            <span className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-xs font-semibold text-zinc-900 uppercase tracking-wider">
               {property.kind}
             </span>
           )}

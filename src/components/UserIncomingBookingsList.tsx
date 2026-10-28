@@ -92,7 +92,7 @@ export default function UserIncomingBookingsList({
                             "confirmed",
                           )
                         }
-                        className="rounded-lg bg-emerald-600 px-3 py-1.5 text-white font-medium hover:bg-emerald-700 transition shadow-sm"
+                        className="rounded-lg bg-emerald-600 px-3 py-1.5 text-white font-medium hover:bg-emerald-700 transition"
                       >
                         Confirm
                       </button>

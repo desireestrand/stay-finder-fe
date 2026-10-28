@@ -54,7 +54,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   return (
     <div className="flex flex-1 items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8">
         <form noValidate onSubmit={handleSubmit} className="space-y-6">
           <div className="text-center">
             <T.Header size="lg">
@@ -73,7 +73,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 type="email"
                 placeholder="name@example.com"
                 required
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black sm:text-sm"
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black sm:text-sm"
               />
             </div>
 
@@ -87,7 +87,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 type="password"
                 placeholder="Minimum 6 characters"
                 required
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black sm:text-sm"
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black sm:text-sm"
               />
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           <button
             type="submit"
             disabled={pending}
-            className="w-full rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 transition-colors"
+            className="w-full rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 transition-colors"
           >
             {pending ? "Loading..." : isLogin ? "Log in" : "Sign up"}
           </button>

@@ -35,7 +35,7 @@ export default function UserPropertiesTab({
         
         <Link
           href="/host/properties/new"
-          className="mt-2 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-medium text-white shadow-sm hover:bg-zinc-800 transition"
+          className="mt-2 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-medium text-white hover:bg-zinc-800 transition"
         >
           + List a stay
         </Link>
