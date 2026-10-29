@@ -1,5 +1,12 @@
+import PageWrapper from "@/components/PageWrapper";
 import AuthForm from "@/components/AuthForm";
 
 export default function SignupPage() {
-  return <AuthForm mode="signup" />;
+  return (
+    <PageWrapper>
+      <main>
+        <AuthForm mode="signup" />
+      </main>
+    </PageWrapper>
+  );
 }

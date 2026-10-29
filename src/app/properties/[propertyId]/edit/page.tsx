@@ -1,103 +1,103 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import PropertyForm from "@/components/PropertyForm";
-import T from "@/components/typography";
-import { getPropertyById, updateProperty } from "@/utils/propertyService";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Property } from "@/types/property";
+import type { Property, PropertyKind } from "@/types/property";
+import { getPropertyById, updateProperty } from "@/utils/propertyService";
+import PageWrapper from "@/components/PageWrapper";
+import PropertyForm, {
+  type PropertyFormValues,
+} from "@/components/PropertyForm";
+import T from "@/components/typography";
 
 export default function EditPropertyPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ propertyId: string }>;
 }) {
+  const { propertyId } = use(params);
   const router = useRouter();
-  const { user, isLoading } = useAuth();
+  const { user } = useAuth();
 
   const [property, setProperty] = useState<Property | null>(null);
   const [loadingProperty, setLoadingProperty] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/auth/login");
-    }
-  }, [user, isLoading, router]);
+    if (!user || !propertyId) return;
 
-  useEffect(() => {
     async function fetchProperty() {
-      const resolvedParams = await params;
-      const data = await getPropertyById(resolvedParams.id);
+      try {
+        setLoadingProperty(true);
+        const data = await getPropertyById(propertyId);
 
-      if (!data) {
-        setError("Property not found.");
-      } else {
-        if (user && data.user_id !== user.id) {
+        if (!data) {
+          setLoadError("Property not found");
+        } else if (data.user_id !== user?.id) {
           router.push("/");
           return;
+        } else {
+          setProperty(data);
         }
-        setProperty(data);
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Failed to load property details";
+        setLoadError(message);
+      } finally {
+        setLoadingProperty(false);
       }
-      setLoadingProperty(false);
     }
     fetchProperty();
-  }, [params, user, router]);
+  }, [propertyId, user, router]);
 
-  async function onUpdate(formData: FormData) {
-    setError(null);
-    const propertyData = await params;
-
+  async function handleUpdate(formData: FormData) {
     try {
-      const result = await updateProperty(propertyData.id, formData);
+      const result = await updateProperty(propertyId, formData);
 
-      if (result.error) {
-        setError(result.error);
-        return { error: result.error };
-      }
-
-      if (result.propertyId) {
-        router.push(`/properties/${result.propertyId}`);
+      if (result.property_id) {
+        router.push(`/properties/${result.property_id}`);
       }
 
       return { success: true };
-    } catch (err) {
+    } catch (error) {
       const message =
-        err instanceof Error ? err.message : "Could not update property.";
-      setError(message);
+        error instanceof Error ? error.message : "Failed to update property";
       return { error: message };
     }
   }
 
-  if (isLoading || loadingProperty) {
-    return (
-      <div className="flex flex-1 items-center justify-center py-20">
-        <p>Loading property...</p>
-      </div>
-    );
-  }
-
-  if (!user || !property) {
-    return null;
-  }
+  const formValues: PropertyFormValues | undefined = property
+    ? {
+        ...property,
+        kind: property.kind as PropertyKind,
+      }
+    : undefined;
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-10">
-      <T.Header size="lg">Edit stay: {property.title}</T.Header>
+    <PageWrapper>
+      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-10">
+        <T.Header size="lg">
+          {property ? `Edit stay: ${property.title}` : "Edit stay"}
+        </T.Header>
 
-      {error && (
-        <div className="rounded-lg bg-red-50 p-4 text-red-600 border border-red-200 dark:bg-red-950/50 dark:text-red-400 dark:border-red-900">
-          {error}
-        </div>
-      )}
-
-      <PropertyForm
-        action={onUpdate}
-        values={property}
-        submitLabel="Save changes"
-        pendingLabel="Saving..."
-      />
-    </main>
+        {loadingProperty ? (
+          <p className="text-sm text-zinc-500">Loading property...</p>
+        ) : loadError ? (
+          <p className="text-sm text-red-500">{loadError}</p>
+        ) : !property ? (
+          <p className="text-sm text-red-500">Property not found.</p>
+        ) : (
+          <PropertyForm
+            onSubmit={handleUpdate}
+            values={formValues}
+            submitLabel="Save changes"
+            pendingLabel="Saving..."
+          />
+        )}
+      </main>
+    </PageWrapper>
   );
 }

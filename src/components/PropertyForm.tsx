@@ -1,36 +1,35 @@
 "use client";
 
-import { SubmitEvent, useState } from "react";
-import type {
-  CreatePropertyState,
-  UpdatePropertyState,
-} from "@/utils/propertyService";
+import type { SubmitEvent } from "react";
+import { useState } from "react";
+import ErrorMessage from "@/components/ErrorMessage";
+import type { PropertyKind } from "@/types/property";
 
 const fieldClassName =
-  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-300 dark:focus:ring-zinc-300";
+  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black focus:ring-1 focus:ring-black";
 
 export type PropertyFormValues = {
   title?: string;
   description?: string;
   city?: string;
   country?: string;
-  kind?: string;
+  kind?: PropertyKind;
   max_guests?: number;
   price_per_night?: number;
   image_url?: string | null;
 };
 
-type PropertyFormProps = {
-  action: (
+interface PropertyFormProps {
+  onSubmit: (
     formData: FormData,
-  ) => Promise<CreatePropertyState | UpdatePropertyState>;
+  ) => Promise<{ success?: boolean; error?: string } | void>;
   values?: PropertyFormValues;
   submitLabel?: string;
   pendingLabel?: string;
-};
+}
 
 export default function PropertyForm({
-  action,
+  onSubmit,
   values,
   submitLabel = "Create stay",
   pendingLabel = "Creating…",
@@ -38,7 +37,7 @@ export default function PropertyForm({
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
-  async function onSubmit(e: SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -47,13 +46,15 @@ export default function PropertyForm({
     setPending(true);
 
     try {
-      const result = await action(formData);
+      const result = await onSubmit(formData);
 
       if (result?.error) {
-        setError(result.error);
+        throw new Error(result.error);
       }
     } catch (error) {
-      setError("Could not create property.");
+      const message =
+        error instanceof Error ? error.message : "Failed to save property";
+      setError(message);
     } finally {
       setPending(false);
     }
@@ -61,11 +62,12 @@ export default function PropertyForm({
 
   return (
     <form
-      onSubmit={onSubmit}
-      className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+      noValidate
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6"
     >
       <div className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+        <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
           Title
           <input
             name="title"
@@ -76,7 +78,7 @@ export default function PropertyForm({
           />
         </label>
 
-        <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+        <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
           Description
           <textarea
             name="description"
@@ -89,7 +91,7 @@ export default function PropertyForm({
         </label>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             City
             <input
               name="city"
@@ -100,7 +102,7 @@ export default function PropertyForm({
             />
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Country
             <input
               name="country"
@@ -113,7 +115,7 @@ export default function PropertyForm({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Kind
             <select
               name="kind"
@@ -130,7 +132,7 @@ export default function PropertyForm({
             </select>
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Image URL
             <input
               name="image_url"
@@ -143,7 +145,7 @@ export default function PropertyForm({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Max guests
             <input
               name="max_guests"
@@ -155,8 +157,8 @@ export default function PropertyForm({
               className={fieldClassName}
             />
           </label>
-          
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Price per night (SEK)
             <input
               name="price_per_night"
@@ -171,16 +173,12 @@ export default function PropertyForm({
         </div>
       </div>
 
-      {error && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-950/50 dark:text-red-400">
-          {error}
-        </div>
-      )}
+      <ErrorMessage message={error} />
 
       <button
         type="submit"
         disabled={pending}
-        className="w-full md:w-auto rounded-lg bg-zinc-900 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+        className="w-full md:w-auto rounded-lg bg-zinc-900 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-60"
       >
         {pending ? pendingLabel : submitLabel}
       </button>

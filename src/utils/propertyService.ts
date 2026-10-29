@@ -4,16 +4,7 @@ import type {
   PropertyListFilter,
 } from "@/types/property";
 import type { PaginatedListResponse } from "@/types/global";
-
-export type CreatePropertyState = {
-  error?: string;
-  propertyId?: string;
-};
-
-export type UpdatePropertyState = {
-  error?: string;
-  propertyId?: string;
-};
+import { parseErrorResponse } from "./error";
 
 function buildQueryString(filters?: Partial<PropertyListFilter>): string {
   const params = new URLSearchParams();
@@ -46,7 +37,11 @@ export async function getUserProperties(): Promise<Property[]> {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch your properties");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch your properties",
+    );
+    throw new Error(message);
   }
 
   return response.json();
@@ -61,12 +56,14 @@ export async function getProperties(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties${queryString ? `?${queryString}` : ""}`,
   );
 
-  const response = await fetch(url, {
-    cache: "no-store",
-  });
+  const response = await fetch(url, { cache: "no-store" });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch properties");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch properties",
+    );
+    throw new Error(message);
   }
 
   return response.json();
@@ -85,33 +82,41 @@ export async function getPropertiesByKind(
   const response = await fetch(url, { cache: "no-store" });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch properties by kind");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch properties by kind",
+    );
+    throw new Error(message);
   }
 
   return response.json();
 }
 
-export async function getPropertyById(id: string): Promise<Property | null> {
-  try {
-    const url = new URL(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/${id}`,
-    );
+export async function getPropertyById(
+  propertyId: string,
+): Promise<Property | null> {
+  const url = new URL(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/${propertyId}`,
+  );
 
-    const response = await fetch(url, { cache: "no-store" });
+  const response = await fetch(url, { cache: "no-store" });
 
-    if (!response.ok) {
+  if (!response.ok) {
+    if (response.status === 404) {
       return null;
     }
 
-    return response.json();
-  } catch {
-    return null;
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch property",
+    );
+    throw new Error(message);
   }
+
+  return response.json();
 }
 
-export async function createProperty(
-  formData: FormData,
-): Promise<CreatePropertyState> {
+export async function createProperty(formData: FormData): Promise<Property> {
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const city = String(formData.get("city") ?? "").trim();
@@ -142,24 +147,25 @@ export async function createProperty(
     },
   );
 
-  if (response.status === 401) {
-    return { error: "You need to be signed in to list a stay." };
-  }
-
   if (!response.ok) {
-    return {
-      error: "Could not create the stay. Check the fields and try again.",
-    };
+    if (response.status === 401) {
+      throw new Error("You need to be signed in to list a stay");
+    }
+
+    const message = await parseErrorResponse(
+      response,
+      "Failed to create the stay. Check the fields and try again.",
+    );
+    throw new Error(message);
   }
 
-  const property: Property = await response.json();
-  return { propertyId: property.property_id };
+  return response.json();
 }
 
 export async function updateProperty(
   propertyId: string,
   formData: FormData,
-): Promise<UpdatePropertyState> {
+): Promise<Property> {
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const city = String(formData.get("city") ?? "").trim();
@@ -190,23 +196,22 @@ export async function updateProperty(
     },
   );
 
-  if (response.status === 401) {
-    return { error: "You need to be signed in to update a stay." };
-  }
-
   if (!response.ok) {
-    return {
-      error: "Could not update the stay. Check the fields and try again.",
-    };
+    if (response.status === 401) {
+      throw new Error("You need to be signed in to update a stay");
+    }
+
+    const message = await parseErrorResponse(
+      response,
+      "Failed to update the stay. Check the fields and try again.",
+    );
+    throw new Error(message);
   }
 
-  const property: Property = await response.json();
-  return { propertyId: property.property_id };
+  return response.json();
 }
 
-export async function deleteProperty(
-  propertyId: string,
-): Promise<{ error?: string }> {
+export async function deleteProperty(propertyId: string): Promise<void> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/${propertyId}`,
     {
@@ -215,13 +220,15 @@ export async function deleteProperty(
     },
   );
 
-  if (response.status === 401) {
-    return { error: "You need to be signed in to delete a stay." };
-  }
-
   if (!response.ok) {
-    return { error: "Could not delete the stay." };
-  }
+    if (response.status === 401) {
+      throw new Error("You need to be signed in to delete a stay");
+    }
 
-  return {};
+    const message = await parseErrorResponse(
+      response,
+      "Failed to delete stay",
+    );
+    throw new Error(message);
+  }
 }

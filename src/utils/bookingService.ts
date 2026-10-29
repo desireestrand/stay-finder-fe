@@ -1,4 +1,10 @@
-import type { Booking } from "@/types/booking";
+import type {
+  Booking,
+  BookingBody,
+  BookingStatus,
+  NewBooking,
+} from "@/types/booking";
+import { parseErrorResponse } from "./error";
 
 export async function getUserBookings(): Promise<Booking[]> {
   const url = new URL(`${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/me`);
@@ -9,7 +15,11 @@ export async function getUserBookings(): Promise<Booking[]> {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch your bookings");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch your bookings",
+    );
+    throw new Error(message);
   }
 
   return response.json();
@@ -28,7 +38,11 @@ export async function getPropertyBookings(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch bookings for property");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch bookings for property",
+    );
+    throw new Error(message);
   }
 
   return response.json();
@@ -36,7 +50,7 @@ export async function getPropertyBookings(
 
 export async function getBookingById(bookingId: string): Promise<Booking> {
   const url = new URL(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/${bookingId}`
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/${bookingId}`,
   );
 
   const response = await fetch(url, {
@@ -45,7 +59,39 @@ export async function getBookingById(bookingId: string): Promise<Booking> {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch booking");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to fetch booking",
+    );
+    throw new Error(message);
+  }
+
+  return response.json();
+}
+
+export async function createBooking(
+  propertyId: string,
+  bookingData: BookingBody,
+): Promise<Booking> {
+  const url = new URL(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/properties/${propertyId}`,
+  );
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(bookingData),
+  });
+
+  if (!response.ok) {
+    const message = await parseErrorResponse(
+      response,
+      "Failed to create booking",
+    );
+    throw new Error(message);
   }
 
   return response.json();
@@ -54,7 +100,7 @@ export async function getBookingById(bookingId: string): Promise<Booking> {
 export async function updateBookingStatus(
   propertyId: string,
   bookingId: string,
-  status: "confirmed" | "cancelled",
+  status: BookingStatus,
 ): Promise<Booking> {
   const url = new URL(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/properties/${propertyId}/${bookingId}`,
@@ -70,7 +116,11 @@ export async function updateBookingStatus(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to update booking status");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to update booking status",
+    );
+    throw new Error(message);
   }
 
   return response.json();
@@ -79,14 +129,7 @@ export async function updateBookingStatus(
 export async function updateGuestBooking(
   propertyId: string,
   bookingId: string,
-  updates: {
-    check_in?: string;
-    check_out?: string;
-    guests?: number;
-    guest_name?: string;
-    guest_email?: string;
-    status?: string;
-  },
+  updates: Partial<NewBooking> & { status?: BookingStatus },
 ): Promise<Booking> {
   const url = new URL(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/properties/${propertyId}/${bookingId}`,
@@ -102,8 +145,11 @@ export async function updateGuestBooking(
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(errorData?.error || "Failed to update booking");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to update booking",
+    );
+    throw new Error(message);
   }
 
   return response.json();
@@ -123,7 +169,11 @@ export async function deleteBooking(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to delete booking");
+    const message = await parseErrorResponse(
+      response,
+      "Failed to delete booking",
+    );
+    throw new Error(message);
   }
 
   return true;

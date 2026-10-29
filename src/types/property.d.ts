@@ -1,12 +1,12 @@
 import type { Database } from "./database.types.js";
 
-type PropertyKind = "apartment" | "villa" | "cabin";
+export type PropertyKind = "apartment" | "villa" | "cabin";
 
-type Property = Database["public"]["Tables"]["properties"]["Row"];
+export type Property = Database["public"]["Tables"]["properties"]["Row"];
 
-type PropertyInsert = Database["public"]["Tables"]["properties"]["Insert"];
+export type PropertyInsert = Database["public"]["Tables"]["properties"]["Insert"];
 
-type NewProperty = Omit<
+export type NewProperty = Omit<
   PropertyInsert,
   "user_id" | "property_id" | "created_at" | "kind"
 > & {
@@ -14,12 +14,12 @@ type NewProperty = Omit<
   kind: PropertyKind;
 };
 
-type PropertyValidKey = keyof Property;
+export type PropertyValidKey = keyof Property;
 
-type PropertySortBy = "title" | "city" | "price_per_night" | "created_at";
-type SortOrder = "asc" | "desc";
+export type PropertySortBy = "title" | "city" | "price_per_night" | "created_at";
+export type SortOrder = "asc" | "desc";
 
-type PropertyListFilter = {
+export type PropertyListFilter = {
   limit: number;
   offset: number;
   city?: string;

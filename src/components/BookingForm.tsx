@@ -1,30 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import type { BookingDates, Booking } from "@/types/booking";
+import type { SubmitEvent } from "react";
+import type { BookingDates, Booking, NewBooking } from "@/types/booking";
+import { createBooking } from "@/utils/bookingService";
+import ErrorMessage from "@/components/ErrorMessage";
 
-type BookingFormProps = {
+interface BookingFormProps {
   propertyId?: string;
   bookingId?: string;
+  pricePerNight?: number;
   initialData?: Booking;
   dates?: BookingDates;
   onBookingComplete?: () => void;
-  action?: (data: {
-    check_in?: string;
-    check_out?: string;
-    guests?: number;
-    guest_name?: string;
-    guest_email?: string;
-  }) => Promise<{ error?: string; success?: boolean }>;
-};
+  onSubmit?: (
+    data: Partial<NewBooking>,
+  ) => Promise<{ error?: string; success?: boolean }>;
+}
 
 export default function BookingForm({
   propertyId,
   bookingId,
+  pricePerNight,
   initialData,
   dates,
   onBookingComplete,
-  action,
+  onSubmit,
 }: BookingFormProps) {
   const [guestName, setGuestName] = useState(initialData?.guest_name || "");
   const [guestEmail, setGuestEmail] = useState(initialData?.guest_email || "");
@@ -37,28 +38,58 @@ export default function BookingForm({
     initialData?.check_out || dates?.check_out || "",
   );
 
+  const today = new Date().toLocaleDateString("sv-SE");
+
+  const calculateNights = (checkInStr: string, checkOutStr: string) => {
+    if (!checkInStr || !checkOutStr) return 0;
+
+    const start = new Date(checkInStr);
+    const end = new Date(checkOutStr);
+
+    const diffTime = end.getTime() - start.getTime();
+
+    const diffDays = Math.round(diffTime / (1000 * 3600 * 24));
+
+    return diffDays > 0 ? diffDays : 0;
+  };
+
+  const nights = calculateNights(checkIn, checkOut);
+  const totalPrice = pricePerNight ? nights * pricePerNight : 0;
+
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    setError(null);
 
     if (!checkIn || !checkOut) {
-      setError("Please select check-in and check-out dates.");
+      setError("Please select check-in and check-out dates");
       return;
     }
 
     if (new Date(checkOut) <= new Date(checkIn)) {
-      setError("Check-out date must be after check-in date.");
+      setError("Check-out date must be after check-in date");
+      return;
+    }
+
+    if (guests < 1) {
+      setError("Number of guests must be at least 1");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(guestEmail)) {
+      setError("Please enter a valid email address");
       return;
     }
 
     setPending(true);
-    setError(null);
 
     try {
-      if (action) {
-        const result = await action({
+      if (onSubmit) {
+        const result = await onSubmit({
           guest_name: guestName,
           guest_email: guestEmail,
           check_in: checkIn,
@@ -69,104 +100,125 @@ export default function BookingForm({
         if (result?.error) {
           throw new Error(result.error);
         }
-      } else {
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/bookings/properties/${propertyId}`;
-        const response = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            guest_name: guestName,
-            guest_email: guestEmail,
-            check_in: checkIn,
-            check_out: checkOut,
-            guests,
-            status: "pending",
-          }),
+      } else if (propertyId) {
+        await createBooking(propertyId, {
+          guest_name: guestName,
+          guest_email: guestEmail,
+          check_in: checkIn,
+          check_out: checkOut,
+          guests
         });
-
-        if (!response.ok) {
-          const data = await response.json();
-          throw new Error(
-            data.message || data.error || "Failed to create booking",
-          );
-        }
       }
 
       onBookingComplete?.();
-    } catch (err) {
-      setError((err as Error).message);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to process booking";
+      setError(message);
     } finally {
       setPending(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1 text-sm">
-        <label>Guest Name</label>
+        <label className="font-medium text-zinc-700">
+          Guest name
+        </label>
+
         <input
           type="text"
           required
           value={guestName}
           onChange={(e) => setGuestName(e.target.value)}
-          className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
         />
       </div>
 
       <div className="flex flex-col gap-1 text-sm">
-        <label>Guest Email</label>
+        <label className="font-medium text-zinc-700">
+          Guest e-mail
+        </label>
+
         <input
           type="email"
           required
           value={guestEmail}
           onChange={(e) => setGuestEmail(e.target.value)}
-          className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
         />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1 text-sm">
-          <label>Check-in</label>
+          <label className="font-medium text-zinc-700">
+            Check-in
+          </label>
+
           <input
             type="date"
             required
+            min={today}
             value={checkIn}
             onChange={(e) => setCheckIn(e.target.value)}
-            className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+            className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
           />
         </div>
 
         <div className="flex flex-col gap-1 text-sm">
-          <label>Check-out</label>
+          <label className="font-medium text-zinc-700">
+            Check-out
+          </label>
+
           <input
             type="date"
             required
+            min={checkIn || today}
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
-            className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+            className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-1 text-sm">
-        <label>Number of Guests</label>
+        <label className="font-medium text-zinc-700">
+          Number of guests
+        </label>
+
         <input
           type="number"
           min={1}
           required
           value={guests}
           onChange={(e) => setGuests(Number(e.target.value))}
-          className="rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+          className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
         />
       </div>
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {nights > 0 && pricePerNight && (
+        <div className="rounded-lg bg-zinc-100 p-4 text-sm space-y-2 border border-zinc-200">
+          <div className="flex justify-between text-zinc-600">
+            <span>
+              {pricePerNight} SEK × {nights} {nights === 1 ? "night" : "nights"}
+            </span>
+            <span>{nights * pricePerNight} SEK</span>
+          </div>
+          
+          <div className="border-t border-zinc-200 pt-2 flex justify-between font-semibold text-zinc-900">
+            <span>Total price</span>
+            <span>{totalPrice} SEK</span>
+          </div>
+        </div>
+      )}
+
+      <ErrorMessage message={error} />
 
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900 transition disabled:opacity-50"
+        className="rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-50"
       >
         {pending ? "Saving..." : bookingId ? "Save Changes" : "Confirm Booking"}
       </button>

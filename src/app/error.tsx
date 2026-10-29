@@ -1,21 +1,31 @@
 "use client";
 
-type ErrorPageProps = {
+import PageWrapper from "@/components/PageWrapper";
+import ErrorMessage from "@/components/ErrorMessage";
+import T from "@/components/typography";
+
+interface ErrorPageProps {
   error: Error & { digest?: string };
   reset: () => void;
 };
 
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
   return (
-    <main className="p-8 flex flex-col items-center justify-center gap-4 min-h-screen">
-      <h1 className="text-xl font-bold">Something went wrong</h1>
-      <p className="text-red-500">{error.message}</p>
-      <button 
-        onClick={reset}
-        className="px-4 py-2 bg-black text-white dark:bg-white dark:text-black rounded-md"
-      >
-        Try again
-      </button>
-    </main>
+    <PageWrapper>
+      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col items-center justify-center gap-6 px-6 py-20 text-center">
+        <T.Header size="lg">Something went wrong</T.Header>
+
+        <div className="w-full">
+          <ErrorMessage message={error.message || "An unexpected error occurred"} />
+        </div>
+
+        <button
+          onClick={reset}
+          className="rounded-lg bg-zinc-900 px-4 py-2.5 text-xs font-medium text-white hover:bg-zinc-800 transition"
+        >
+          Try again
+        </button>
+      </main>
+    </PageWrapper>
   );
 }

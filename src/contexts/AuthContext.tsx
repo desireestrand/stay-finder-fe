@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthUser } from "@/types/auth";
 import {
   getMe,
   login as apiLogin,
@@ -18,8 +19,8 @@ type AuthContextState = {
   user: AuthUser | null;
   isLoading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<void | string>;
-  signup: (email: string, password: string) => Promise<void | string>;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -27,6 +28,7 @@ const AuthContext = createContext<AuthContextState | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,9 +40,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       setUser(currentUser);
       setError(null);
-    } catch (error) {
+    } catch {
       setUser(null);
-      setError((error as Error).message ?? "Could not fetch user");
     } finally {
       setIsLoading(false);
     }
@@ -50,43 +51,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     fetchUser();
   }, []);
 
-  const login = async (
-    email: string,
-    password: string,
-  ): Promise<void | string> => {
+  const login = async (email: string, password: string): Promise<void> => {
     try {
-      const result = await apiLogin(email, password);
+      setError(null);
 
-      if (result !== true) {
-        return result;
-      }
+      await apiLogin(email, password);
 
       await fetchUser();
     } catch (error) {
-      return "Failed to log in";
+      const message = error instanceof Error ? error.message : "Failed to log in";
+      setError(message);
+      throw error;
     }
   };
 
-  const signup = async (
-    email: string,
-    password: string,
-  ): Promise<void | string> => {
+  const signup = async (email: string, password: string): Promise<void> => {
     try {
-      const result = await apiSignup(email, password);
+      setError(null);
 
-      if (result !== true) {
-        return result;
-      }
+      await apiSignup(email, password);
 
       await fetchUser();
     } catch (error) {
-      return "Failed to sign up";
+      const message = error instanceof Error ? error.message : "Failed to sign up";
+      setError(message);
+      throw error;
     }
   };
 
   const logout = async () => {
     try {
+      setError(null);
       await apiLogout();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to log out";
+      setError(message);
     } finally {
       setUser(null);
     }

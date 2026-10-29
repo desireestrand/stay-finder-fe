@@ -7,7 +7,7 @@ import "react-day-picker/dist/style.css";
 import { parseISO, format, startOfToday } from "date-fns";
 import type { BookingDates } from "@/types/booking";
 
-type BookingPickerProps = {
+interface BookingPickerProps {
   initialDates?: BookingDates;
   selectDates: React.Dispatch<React.SetStateAction<BookingDates | undefined>>;
 };

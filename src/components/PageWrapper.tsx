@@ -1,20 +1,40 @@
-// src/components/PageWrapper.tsx
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, type ReactNode } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { redirect } from "next/navigation";
-import type { ReactNode } from "react";
 
 export default function PageWrapper({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  
   const { user, isLoading } = useAuth();
 
+  const isAuthPage = pathname.startsWith("/auth");
+  const isProtectedPropertyPage = pathname.includes("/new") || pathname.includes("/edit");
+  const isProfilePage = pathname.startsWith("/profile");
+  const isProtected = isProfilePage || isProtectedPropertyPage;
+
+  useEffect(() => {
+    if (isLoading) return;
+
+   if (isProtected && !user) {
+      router.push("/auth/login");
+    }
+  }, [user, isLoading, isProtected, router]);
+
   if (isLoading) {
-    return <p className="p-8 text-center">Loading...</p>;
+    return (
+      <div className="flex flex-1 items-center justify-center py-20">
+        <p className="text-sm text-zinc-500">Loading...</p>
+      </div>
+    );
   }
 
-  if (!user) {
-    redirect("/auth/login");
+  if (isProtected && !user) {
+    return null;
   }
 
-  return <div className="container mx-auto">{children}</div>;
+  return <div className="container mx-auto px-4 py-6">{children}</div>;
 }

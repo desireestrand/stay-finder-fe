@@ -1,7 +1,7 @@
-export async function login(
-  email: string,
-  password: string,
-): Promise<true | string> {
+import { AuthUser } from "@/types/auth";
+import { parseErrorResponse } from "./error";
+
+export async function login(email: string, password: string): Promise<void> {
   const url = new URL(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`);
 
   const response = await fetch(url, {
@@ -17,17 +17,15 @@ export async function login(
   });
 
   if (!response.ok) {
-    const data = await response.json().catch(() => null);
-    return data?.error || "Invalid credentials";
+    const errorMessage = await parseErrorResponse(
+      response,
+      "Invalid credentials",
+    );
+    throw new Error(errorMessage);
   }
-
-  return true;
 }
 
-export async function signup(
-  email: string,
-  password: string,
-): Promise<true | string> {
+export async function signup(email: string, password: string): Promise<void> {
   const url = new URL(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register`);
 
   const response = await fetch(url, {
@@ -40,14 +38,15 @@ export async function signup(
   });
 
   if (!response.ok) {
-    const data = await response.json().catch(() => null);
-    return data?.error || "Failed to register account";
+    const errorMessage = await parseErrorResponse(
+      response,
+      "Failed to register account",
+    );
+    throw new Error(errorMessage);
   }
-
-  return true;
 }
 
-export async function logout(): Promise<boolean> {
+export async function logout(): Promise<void> {
   const url = new URL(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`);
 
   const response = await fetch(url, {
@@ -55,7 +54,13 @@ export async function logout(): Promise<boolean> {
     credentials: "include",
   });
 
-  return response.ok;
+  if (!response.ok) {
+    const errorMessage = await parseErrorResponse(
+      response,
+      "Failed to log out",
+    );
+    throw new Error(errorMessage);
+  }
 }
 
 export async function getMe(): Promise<AuthUser | null> {
@@ -74,5 +79,6 @@ export async function getMe(): Promise<AuthUser | null> {
   }
 
   const data = await response.json();
-  return data?.user as AuthUser | null;
+
+  return (data?.user || data) as AuthUser | null;
 }
