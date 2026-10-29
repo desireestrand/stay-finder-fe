@@ -129,7 +129,7 @@ export default function UserIncomingBookingsList({
                     </button>
                   )}
 
-                  {booking.status === "cancelled" && (
+                  {!isPastBooking && booking.status === "cancelled" && (
                     <button
                       type="button"
                       onClick={() =>
