@@ -123,6 +123,13 @@ export default function ProfilePage() {
       await deleteBooking(propertyId, bookingId);
 
       setBookings((prev) => prev.filter((b) => b.booking_id !== bookingId));
+
+      setPropertyBookings((prev) => ({
+        ...prev,
+        [propertyId]: (prev[propertyId] || []).filter(
+          (b) => b.booking_id !== bookingId,
+        ),
+      }));
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Failed to delete booking";

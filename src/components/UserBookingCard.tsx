@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Booking } from "@/types/booking";
 import Link from "next/link";
 import T from "./typography";
@@ -23,6 +24,8 @@ export default function UserBookingCard({
   onCancelBooking,
   onDeleteBooking,
 }: UserBookingCardProps) {
+  const router = useRouter();
+
   const [modalAction, setModalAction] = useState<"cancel" | "delete" | null>(
     null,
   );
@@ -30,6 +33,11 @@ export default function UserBookingCard({
 
   const today = new Date().toLocaleDateString("sv-SE");
   const isPastBooking = booking.check_in < today;
+
+  const showButtons =
+    (!isPastBooking && booking.status === "pending") ||
+    (!isPastBooking && booking.status !== "cancelled") ||
+    booking.status === "cancelled";
 
   async function handleConfirm() {
     setIsProcessing(true);
@@ -39,6 +47,8 @@ export default function UserBookingCard({
       } else if (modalAction === "delete") {
         await onDeleteBooking(booking.property_id, booking.booking_id);
       }
+      
+      router.refresh();
     } finally {
       setIsProcessing(false);
       setModalAction(null);
@@ -47,17 +57,17 @@ export default function UserBookingCard({
 
   return (
     <>
-      <div className="border border-zinc-200 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white">
-        <div className="flex flex-col gap-1">
-          <T.Header size="sm">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-zinc-50 p-4 rounded-xl text-xs border border-zinc-100">
+        <div>
+          <T.Header size="sm" className="text-zinc-900 font-semibold">
             Booking at property #{booking.property_id.slice(33, 36)}
           </T.Header>
 
-          <p className="text-xs text-zinc-500">
+          <p className="text-zinc-500 mt-0.5">
             {booking.check_in} → {booking.check_out}
           </p>
 
-          <p className="text-xs text-zinc-500">
+          <p className="text-zinc-500 mt-0.5">
             {booking.guests} {booking.guests === 1 ? "guest" : "guests"} • Total
             price:{" "}
             <span className="font-semibold text-zinc-900">
@@ -65,47 +75,53 @@ export default function UserBookingCard({
             </span>
           </p>
 
-          <p className="text-xs font-medium text-zinc-700 mt-0.5">
+          <p className="text-zinc-500 mt-0.5">
             Status:{" "}
-            <span className="capitalize font-semibold">{booking.status}</span>
+            <span className="font-semibold capitalize text-zinc-700">
+              {booking.status}
+            </span>
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2 items-center">
+        <div className="flex w-full lg:w-auto gap-2.5 items-center justify-between lg:justify-end border-t lg:border-t-0 border-zinc-100 shrink-0">
           <Link
             href={`/properties/${booking.property_id}`}
-            className="rounded-lg bg-zinc-100 px-3 py-2 text-xs font-medium text-zinc-800 hover:bg-zinc-200 transition"
+            className="flex-1 lg:flex-none text-center rounded-lg bg-zinc-100 px-4 py-2.5 lg:py-2 text-xs font-medium text-zinc-800 hover:bg-zinc-200 transition"
           >
             View property
           </Link>
 
-          {booking.status !== "cancelled" && !isPastBooking && (
+          {showButtons && (
             <>
-              <Link
-                href={`/properties/${booking.property_id}/bookings/${booking.booking_id}/edit`}
-                className="rounded-lg bg-zinc-900 px-3 py-2 text-xs font-medium text-white hover:bg-zinc-800 transition"
-              >
-                Edit
-              </Link>
+              {!isPastBooking && booking.status !== "cancelled" && (
+                <Link
+                  href={`/properties/${booking.property_id}/bookings/${booking.booking_id}/edit`}
+                  className="flex-1 lg:flex-none text-center rounded-lg bg-zinc-900 px-4 py-2.5 lg:py-2 text-xs font-medium text-white hover:bg-zinc-800 transition"
+                >
+                  Edit
+                </Link>
+              )}
 
-              <button
-                type="button"
-                onClick={() => setModalAction("cancel")}
-                className="rounded-lg bg-zinc-200 px-3 py-2 text-xs font-medium text-zinc-800 hover:bg-zinc-300 transition"
-              >
-                Cancel
-              </button>
+              {!isPastBooking && booking.status !== "cancelled" && (
+                <button
+                  type="button"
+                  onClick={() => setModalAction("cancel")}
+                  className="flex-1 lg:flex-none text-center rounded-lg bg-zinc-200 px-4 py-2.5 lg:py-2 text-xs font-medium text-zinc-800 hover:bg-zinc-300 transition"
+                >
+                  Cancel
+                </button>
+              )}
+
+              {!isPastBooking && booking.status === "cancelled" && (
+                <button
+                  type="button"
+                  onClick={() => setModalAction("delete")}
+                  className="flex-1 lg:flex-none text-center rounded-lg bg-red-50 px-4 py-2.5 lg:py-2 text-xs font-medium text-red-600 hover:bg-red-100 transition"
+                >
+                  Delete
+                </button>
+              )}
             </>
-          )}
-
-          {booking.status === "cancelled" && (
-            <button
-              type="button"
-              onClick={() => setModalAction("delete")}
-              className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-100 transition"
-            >
-              Delete
-            </button>
           )}
         </div>
       </div>
@@ -127,7 +143,7 @@ export default function UserBookingCard({
               ? "Confirm cancel"
               : "Delete"
         }
-        cancelText="Close"
+        cancelText="Cancel"
         variant={modalAction === "delete" ? "danger" : "default"}
         onConfirm={handleConfirm}
         onClose={() => setModalAction(null)}

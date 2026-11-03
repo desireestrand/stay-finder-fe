@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Booking, BookingStatus } from "@/types/booking";
 import ConfirmModal from "./ConfirmModal";
 
@@ -21,6 +22,8 @@ export default function UserIncomingBookingsList({
   onUpdateBookingStatus,
   onDeleteBooking,
 }: UserIncomingBookingsListProps) {
+  const router = useRouter();
+
   const [selectedBooking, setSelectedBooking] = useState<{
     id: string;
     action: "cancel" | "delete";
@@ -43,6 +46,8 @@ export default function UserIncomingBookingsList({
     } else if (selectedBooking.action === "delete") {
       onDeleteBooking(propertyId, selectedBooking.id);
     }
+
+    router.refresh();
     setSelectedBooking(null);
   }
 
