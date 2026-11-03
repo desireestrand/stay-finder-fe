@@ -90,7 +90,7 @@ export default async function PropertyPage({
                 <span className="font-medium text-zinc-900">
                   Owner:
                 </span>{" "}
-                {property.user_id}
+                Namn Namnsson ({property.user_id})
               </div>
             )}
           </div>

@@ -64,7 +64,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 E-mail
               </label>
 
@@ -78,7 +78,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
 

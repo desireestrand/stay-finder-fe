@@ -11,14 +11,16 @@ import ErrorMessage from "@/components/ErrorMessage";
 import type { SubmitEvent } from "react";
 
 interface SearchBarProps {
+  name: string;
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
   placeholder?: string;
 }
 
-function Searchbar({ search, setSearch, placeholder }: SearchBarProps) {
+function Searchbar({ name, search, setSearch, placeholder }: SearchBarProps) {
   return (
     <input
+      name={name}
       type="search"
       value={search}
       placeholder={placeholder}
@@ -130,11 +132,12 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-zinc-600">
+          <label htmlFor="search_words" className="text-xs font-medium text-zinc-600">
             Search words
           </label>
 
           <Searchbar
+            name="search_words"
             search={q}
             setSearch={setQ}
             placeholder="Ex. pool, loft, cozy"
@@ -142,11 +145,12 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-zinc-600">
+          <label htmlFor="city" className="text-xs font-medium text-zinc-600">
             City
           </label>
 
           <Searchbar
+            name="city"
             search={city}
             setSearch={setCity}
             placeholder="Ex. Stockholm"
@@ -154,11 +158,12 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-zinc-600">
+          <label htmlFor="guests" className="text-xs font-medium text-zinc-600">
             Guests
           </label>
 
           <input
+            name="guests"
             type="number"
             min={1}
             value={maxGuests}
@@ -171,13 +176,17 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
 
       <div className="flex flex-col gap-4 pt-4 border-t border-zinc-100 md:flex-row md:items-end md:justify-between">
         <div className="flex flex-wrap items-end gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-zinc-600">
+          <fieldset className="flex flex-col gap-1.5">
+            <legend className="text-xs font-medium text-zinc-600 mb-1.5">
               Available dates (Check-in / Check-out)
-            </label>
+            </legend>
 
             <div className="flex flex-col sm:flex-row items-center gap-2">
+              <label htmlFor="check_in" hidden>
+                Check-in
+              </label>
               <input
+                name="check_in"
                 type="date"
                 value={startDate}
                 min={today}
@@ -187,7 +196,12 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
 
               <span className="text-zinc-400 hidden sm:inline">-</span>
 
+              <label htmlFor="check_out" hidden>
+                Check-out
+              </label>
+
               <input
+                name="check_out"
                 type="date"
                 value={endDate}
                 min={startDate || today}
@@ -195,15 +209,19 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
                 className="h-10 w-full sm:w-1/2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black"
               />
             </div>
-          </div>
+          </fieldset>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-zinc-600">
+            <label
+              htmlFor="price_per_night"
+              className="text-xs font-medium text-zinc-600"
+            >
               Price per night (SEK)
             </label>
 
             <div className="flex items-center gap-2">
               <input
+                name="price_per_night"
                 type="number"
                 min={0}
                 value={minPrice}
@@ -226,11 +244,15 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-zinc-600">
+            <label
+              htmlFor="sort_by"
+              className="text-xs font-medium text-zinc-600"
+            >
               Sort by
             </label>
 
             <select
+              name="sort_by"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as PropertySortBy)}
               className="h-10 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black"
@@ -243,11 +265,15 @@ export default function PropertyFilter({ filter }: PropertyFilterProps) {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-zinc-600">
+            <label
+              htmlFor="sort_order"
+              className="text-xs font-medium text-zinc-600"
+            >
               Order
             </label>
 
             <select
+              name="sort_order"
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as SortOrder)}
               className="h-10 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition focus:border-black"

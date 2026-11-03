@@ -106,7 +106,7 @@ export default function BookingForm({
           guest_email: guestEmail,
           check_in: checkIn,
           check_out: checkOut,
-          guests
+          guests,
         });
       }
 
@@ -123,11 +123,12 @@ export default function BookingForm({
   return (
     <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1 text-sm">
-        <label className="font-medium text-zinc-700">
+        <label htmlFor="name" className="font-medium text-zinc-700">
           Guest name
         </label>
 
         <input
+          name="name"
           type="text"
           required
           value={guestName}
@@ -137,11 +138,12 @@ export default function BookingForm({
       </div>
 
       <div className="flex flex-col gap-1 text-sm">
-        <label className="font-medium text-zinc-700">
+        <label htmlFor="email" className="font-medium text-zinc-700">
           Guest e-mail
         </label>
 
         <input
+          name="email"
           type="email"
           required
           value={guestEmail}
@@ -152,11 +154,12 @@ export default function BookingForm({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1 text-sm">
-          <label className="font-medium text-zinc-700">
+          <label htmlFor="check_in" className="font-medium text-zinc-700">
             Check-in
           </label>
 
           <input
+            name="check_in"
             type="date"
             required
             min={today}
@@ -167,11 +170,12 @@ export default function BookingForm({
         </div>
 
         <div className="flex flex-col gap-1 text-sm">
-          <label className="font-medium text-zinc-700">
+          <label htmlFor="check_out" className="font-medium text-zinc-700">
             Check-out
           </label>
 
           <input
+            name="check_out"
             type="date"
             required
             min={checkIn || today}
@@ -183,11 +187,12 @@ export default function BookingForm({
       </div>
 
       <div className="flex flex-col gap-1 text-sm">
-        <label className="font-medium text-zinc-700">
+        <label htmlFor="guests" className="font-medium text-zinc-700">
           Number of guests
         </label>
 
         <input
+          name="guests"
           type="number"
           min={1}
           required
@@ -205,7 +210,7 @@ export default function BookingForm({
             </span>
             <span>{nights * pricePerNight} SEK</span>
           </div>
-          
+
           <div className="border-t border-zinc-200 pt-2 flex justify-between font-semibold text-zinc-900">
             <span>Total price</span>
             <span>{totalPrice} SEK</span>

@@ -67,7 +67,7 @@ export default function PropertyForm({
       className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6"
     >
       <div className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
+        <label htmlFor="title" className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
           Title
           <input
             name="title"
@@ -78,7 +78,7 @@ export default function PropertyForm({
           />
         </label>
 
-        <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
+        <label htmlFor="description" className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
           Description
           <textarea
             name="description"
@@ -91,7 +91,7 @@ export default function PropertyForm({
         </label>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
+          <label htmlFor="city" className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             City
             <input
               name="city"
@@ -102,7 +102,7 @@ export default function PropertyForm({
             />
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
+          <label htmlFor="country" className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Country
             <input
               name="country"
@@ -115,7 +115,7 @@ export default function PropertyForm({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
+          <label htmlFor="kind" className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Kind
             <select
               name="kind"
@@ -132,7 +132,7 @@ export default function PropertyForm({
             </select>
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
+          <label htmlFor="image_url" className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Image URL
             <input
               name="image_url"
@@ -145,7 +145,7 @@ export default function PropertyForm({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
+          <label htmlFor="max_guests" className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Max guests
             <input
               name="max_guests"
@@ -158,7 +158,7 @@ export default function PropertyForm({
             />
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
+          <label htmlFor="price_per_night" className="flex flex-col gap-1.5 text-xs font-medium text-zinc-600">
             Price per night (SEK)
             <input
               name="price_per_night"
