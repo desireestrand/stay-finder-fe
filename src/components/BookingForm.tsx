@@ -110,6 +110,12 @@ export default function BookingForm({
         });
       }
 
+      setGuestName("");
+      setGuestEmail("");
+      setGuests(1);
+      setCheckIn("");
+      setCheckOut("");
+
       onBookingComplete?.();
     } catch (error) {
       const message =
