@@ -61,10 +61,7 @@ export default async function PropertyPage({
                   {property.price_per_night} SEK
                 </span>
 
-                <span className="text-lg text-zinc-500">
-                  {" "}
-                  / night
-                </span>
+                <span className="text-lg text-zinc-500"> / night</span>
               </p>
             </div>
 
@@ -75,9 +72,8 @@ export default async function PropertyPage({
 
               <p className="text-sm text-zinc-500">
                 {property.kind && `${property.kind.toLocaleUpperCase()} `}
-                <span className="text-zinc-400">
-                  ·
-                </span> Max {property.max_guests} guests
+                <span className="text-zinc-400">·</span> Max{" "}
+                {property.max_guests} guests
               </p>
 
               <p className="py-3 leading-relaxed text-zinc-700 whitespace-pre-line">
@@ -87,10 +83,8 @@ export default async function PropertyPage({
 
             {property.user_id && (
               <div className="text-sm text-zinc-500">
-                <span className="font-medium text-zinc-900">
-                  Owner:
-                </span>{" "}
-                Namn Namnsson ({property.user_id})
+                <span className="font-medium text-zinc-900">Owner ID:</span>{" "}
+                {property.user_id}
               </div>
             )}
           </div>
